@@ -6,6 +6,7 @@ module com.warehouse.warehouse {
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
+    requires java.sql;
 
     opens com.warehouse.warehouse to javafx.fxml;
     exports com.warehouse.warehouse;
