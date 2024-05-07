@@ -9,6 +9,6 @@ services:
       - MYSQL_DATABASE=warehouse
     volumes:
       - db-data:/var/lib/mysql
-      - ./database/sql-scripts:/docker-entrypoint-initdb.d
+      - ./database:/database-scripts
 volumes:
   db-data:
