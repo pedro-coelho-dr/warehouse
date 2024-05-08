@@ -2,5 +2,6 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/database/initdb.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/database/initdb_vs1.sql" dialect="MySQL" />
   </component>
 </project>
