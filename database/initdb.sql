@@ -4,7 +4,7 @@ CREATE TABLE Pessoa (
                         nome VARCHAR(100),
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-                    );
+ );
 
 CREATE TABLE Cliente (
                          fk_Pessoa_id INT PRIMARY KEY,
@@ -24,7 +24,6 @@ CREATE TABLE Pessoa_Juridica (
                                  fk_Cliente_id INT PRIMARY KEY,
                                  FOREIGN KEY (fk_Cliente_id) REFERENCES Cliente (fk_Pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
-
 
 CREATE TABLE Fornecedor (
                             cnpj VARCHAR(20),
@@ -55,7 +54,6 @@ CREATE TABLE Categoria (
                            nome VARCHAR(100),
                            descricao VARCHAR(200)
 );
-
 
 CREATE TABLE Produto (
                          id INT PRIMARY KEY,
@@ -120,7 +118,6 @@ CREATE TABLE devolve (
                          FOREIGN KEY (fk_Cliente_id) REFERENCES Cliente (fk_Pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
                          FOREIGN KEY (fk_Produto_id) REFERENCES Produto (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
-
 
 CREATE TABLE telefone (
                           id INT NOT NULL PRIMARY KEY,
