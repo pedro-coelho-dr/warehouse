@@ -23,7 +23,7 @@ public class HelloController {
     private void loadData() {
         try (Connection conn = DatabaseConnector.getConnection()) {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT name FROM SampleTable;");
+            ResultSet rs = stmt.executeQuery("SELECT name FROM cliente;");
             while (rs.next()) {
                 dataList.getItems().add(rs.getString("name"));
             }

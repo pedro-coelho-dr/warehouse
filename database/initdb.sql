@@ -1,139 +1,147 @@
-CREATE TABLE Pessoa (
-                        id INT PRIMARY KEY,
+CREATE TABLE pessoa (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
                         email VARCHAR(100) UNIQUE,
+                        tipo VARCHAR(2) CHECK (tipo IN ('PF', 'PJ')),
+
+                        -- Pessoa Física
                         nome VARCHAR(100),
+                        cpf VARCHAR(14) UNIQUE,
+
+                        -- Pessoa Jurídica
+                        razao_social VARCHAR(100),
+                        cnpj VARCHAR(20) UNIQUE,
+                        inscricao_estadual VARCHAR(50) UNIQUE,
+
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  );
 
-CREATE TABLE Cliente (
-                         fk_Pessoa_id INT PRIMARY KEY,
-                         FOREIGN KEY (fk_Pessoa_id) REFERENCES Pessoa (id) ON DELETE RESTRICT ON UPDATE CASCADE
+CREATE TABLE cliente (
+                         fk_pessoa_id INT PRIMARY KEY,
+                         FOREIGN KEY (fk_pessoa_id) REFERENCES pessoa (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE Pessoa_Fisica (
-                               cpf VARCHAR(13) UNIQUE,
-                               fk_Cliente_id INT PRIMARY KEY,
-                               FOREIGN KEY (fk_Cliente_id) REFERENCES Cliente (fk_Pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE
+CREATE TABLE fornecedor (
+                            fk_pessoa_id INT PRIMARY KEY,
+                            FOREIGN KEY (fk_pessoa_id) REFERENCES pessoa (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE Pessoa_Juridica (
-                                 razao_social VARCHAR(100),
-                                 cnpj VARCHAR(20) UNIQUE,
-                                 inscricao_estadual VARCHAR(50) UNIQUE,
-                                 fk_Cliente_id INT PRIMARY KEY,
-                                 FOREIGN KEY (fk_Cliente_id) REFERENCES Cliente (fk_Pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE
+CREATE TABLE departamento (
+                              id INT AUTO_INCREMENT PRIMARY KEY,
+                              nome VARCHAR(100),
+                              descricao TEXT
 );
 
-CREATE TABLE Fornecedor (
-                            cnpj VARCHAR(20),
-                            fk_Pessoa_id INT PRIMARY KEY,
-                            FOREIGN KEY (fk_Pessoa_id) REFERENCES Pessoa (id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
-CREATE TABLE Departamento (
-                              id INT PRIMARY KEY,
-                              nome VARCHAR(100)
-);
-
-CREATE TABLE Funcionario (
+CREATE TABLE funcionario (
                              data_de_contratacao DATE,
-                             salario DOUBLE,
-                             status VARCHAR(15) DEFAULT 'Ativo',
-                             cpf VARCHAR(13),
-                             fk_Pessoa_id INT PRIMARY KEY,
-                             gerente_fk_Funcionario_id INT,
-                             fk_Departamento_id INT,
-                             FOREIGN KEY (fk_Pessoa_id) REFERENCES Pessoa (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                             FOREIGN KEY (fk_Departamento_id) REFERENCES Departamento (id) ON DELETE SET NULL ON UPDATE CASCADE,
-                             FOREIGN KEY (gerente_fk_Funcionario_id) REFERENCES Funcionario (fk_Pessoa_id) ON DELETE SET NULL ON UPDATE CASCADE
+                             salario DECIMAL(10,2),
+                             status VARCHAR(15) CHECK (status IN ('Ativo', 'Inativo')),
+
+                             fk_pessoa_id INT PRIMARY KEY,
+                             gerente_fk_funcionario_id INT,
+                             fk_departamento_id INT,
+                             FOREIGN KEY (fk_pessoa_id) REFERENCES pessoa (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                             FOREIGN KEY (fk_departamento_id) REFERENCES departamento (id) ON DELETE SET NULL ON UPDATE CASCADE,
+                             FOREIGN KEY (gerente_fk_funcionario_id) REFERENCES funcionario (fk_pessoa_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-CREATE TABLE Categoria (
-                           id INT PRIMARY KEY,
+CREATE TABLE categoria (
+                           id INT AUTO_INCREMENT PRIMARY KEY,
                            nome VARCHAR(100),
-                           descricao VARCHAR(200)
+                           descricao TEXT
 );
 
-CREATE TABLE Produto (
-                         id INT PRIMARY KEY,
+CREATE TABLE produto (
+                         id INT AUTO_INCREMENT PRIMARY KEY,
                          nome VARCHAR(100),
-                         descricao VARCHAR(200),
-                         preco_venda DOUBLE,
-                         preco_aluguel DOUBLE,
+                         descricao TEXT,
+                         preco_venda DECIMAL(10,2),
+                         preco_aluguel DECIMAL(10,2),
                          quantidade_estoque INT,
-                         peso DOUBLE,
-                         dimensoes DOUBLE,
-                         cor VARCHAR(20),
-                         fk_Categoria_id INT,
-                         FOREIGN KEY (fk_Categoria_id) REFERENCES Categoria (id) ON DELETE SET NULL ON UPDATE CASCADE
+
+                         fk_categoria_id INT,
+                         FOREIGN KEY (fk_categoria_id) REFERENCES categoria (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-CREATE TABLE Pedido (
-                        id INT PRIMARY KEY,
-                        dt_expedicao DATE,
-                        valor INT,
-                        desconto INT,
-                        fk_Funcionario_id INT,
-                        fk_Produto_id INT,
-                        fk_Cliente_id INT,
-                        status VARCHAR(50) DEFAULT 'Em andamento',
+CREATE TABLE pedido (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        valor DECIMAL(10,2),
+                        desconto DECIMAL(10,2),
+                        quantidade INT,
+                        status VARCHAR(50) CHECK (status IN ('Em Andamento', 'Finalizado', 'Cancelado')),
+
+                        fk_funcionario_id INT,
+                        fk_produto_id INT,
+                        fk_cliente_id INT,
+                        FOREIGN KEY (fk_cliente_id) REFERENCES cliente (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                        FOREIGN KEY (fk_funcionario_id) REFERENCES funcionario (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                        FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        FOREIGN KEY (fk_Cliente_id) REFERENCES Cliente (fk_Pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                        FOREIGN KEY (fk_Funcionario_id) REFERENCES Funcionario (fk_Pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                        FOREIGN KEY (fk_Produto_id) REFERENCES Produto (id) ON DELETE RESTRICT ON UPDATE CASCADE
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Venda (
-                       fk_Pedido_id INT PRIMARY KEY,
-                       FOREIGN KEY (fk_Pedido_id) REFERENCES Pedido (id) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE venda (
+                       fk_pedido_id INT PRIMARY KEY,
+                       FOREIGN KEY (fk_pedido_id) REFERENCES pedido (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Aluguel (
+CREATE TABLE aluguel (
                          dt_devolucao DATE,
-                         fk_Pedido_id INT PRIMARY KEY,
-                         FOREIGN KEY (fk_Pedido_id) REFERENCES Pedido (id) ON DELETE CASCADE ON UPDATE CASCADE
+                         fk_pedido_id INT PRIMARY KEY,
+                         status VARCHAR(15) CHECK (status IN ('Entregue', 'Devolvido', 'Não Devolvido')),
+                         FOREIGN KEY (fk_pedido_id) REFERENCES pedido (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE fornece (
-                         fk_Fornecedor_id INT,
-                         fk_Produto_id INT,
-                         preco_venda DOUBLE,
-                         qtd_min INT,
+                         preco_compra DECIMAL(10,2),
+                         quantidade INT,
+
+                         fk_fornecedor_id INT,
+                         fk_produto_id INT,
+                         PRIMARY KEY (fk_fornecedor_id, fk_produto_id),
+                         FOREIGN KEY (fk_fornecedor_id) REFERENCES fornecedor (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                         FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                         PRIMARY KEY (fk_Fornecedor_id, fk_Produto_id),
-                         FOREIGN KEY (fk_Fornecedor_id) REFERENCES Fornecedor (fk_Pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                         FOREIGN KEY (fk_Produto_id) REFERENCES Produto (id) ON DELETE RESTRICT ON UPDATE CASCADE
+                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE devolve (
-                         fk_Cliente_id INT,
-                         fk_Produto_id INT,
+                         fk_cliente_id INT,
+                         fk_produto_id INT,
                          dt_devolucao DATE,
+                         PRIMARY KEY (dt_devolucao, fk_produto_id, fk_cliente_id),
+                         FOREIGN KEY (fk_cliente_id) REFERENCES cliente (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                         FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                         PRIMARY KEY (dt_devolucao, fk_Produto_id, fk_Cliente_id),
-                         FOREIGN KEY (fk_Cliente_id) REFERENCES Cliente (fk_Pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                         FOREIGN KEY (fk_Produto_id) REFERENCES Produto (id) ON DELETE RESTRICT ON UPDATE CASCADE
+                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE telefone (
-                          id INT NOT NULL PRIMARY KEY,
+                          id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
                           telefone VARCHAR(20),
-                          fk_Pessoa_id INT,
-                          FOREIGN KEY (fk_Pessoa_id) REFERENCES Pessoa (id) ON DELETE CASCADE ON UPDATE CASCADE
+
+                          fk_pessoa_id INT,
+                          FOREIGN KEY (fk_pessoa_id) REFERENCES pessoa (id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE endereco (
-                          id INT NOT NULL PRIMARY KEY,
+                          id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
                           rua VARCHAR(50),
                           numero INT,
                           bairro VARCHAR(50),
                           cidade VARCHAR(50),
                           estado VARCHAR(2),
                           cep VARCHAR(9),
-                          fk_Pessoa_id INT,
-                          FOREIGN KEY (fk_Pessoa_id) REFERENCES Pessoa (id) ON DELETE CASCADE ON UPDATE CASCADE
+
+                          fk_pessoa_id INT,
+                          FOREIGN KEY (fk_pessoa_id) REFERENCES pessoa (id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
