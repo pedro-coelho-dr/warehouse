@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="323.0" prefWidth="894.0" spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.MainController">
+    <Label style="-fx-font-size: 24px;" text="Warehouse" />
+    <Button fx:id="btnClientes" onAction="#handleClientes" text="Clientes" />
+    <Button fx:id="btnPedidos" onAction="#handlePedidos" text="Pedidos" />
+    <Button fx:id="btnProdutos" onAction="#handleProdutos" text="Produtos" />
+    <Button fx:id="btnFuncionarios" onAction="#handleFuncionarios" text="Funcionários" />
+    <Button fx:id="btnFornecedores" onAction="#handleFornecedores" text="Fornecedores" />
+</VBox>

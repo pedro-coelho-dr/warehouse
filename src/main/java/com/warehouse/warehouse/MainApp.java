@@ -6,20 +6,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class HelloApplication extends Application {
+public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Load the FXML file
-        Parent root = FXMLLoader.load(getClass().getResource("/com/warehouse/warehouse/hello-view.fxml"));
+        // Load the main view FXML file
+        Parent root = FXMLLoader.load(getClass().getResource("/com/warehouse/warehouse/MainView.fxml"));
 
-        Scene scene = new Scene(root, 320, 240);
-        primaryStage.setTitle("JavaFX and MySQL Connection Test");
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("Warehouse Management System");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch(args);
+        launch(args); // Launch the JavaFX application
     }
 }
