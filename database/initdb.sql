@@ -45,6 +45,7 @@ CREATE TABLE funcionario (
                              FOREIGN KEY (gerente_fk_funcionario_id) REFERENCES funcionario (fk_pessoa_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+
 CREATE TABLE categoria (
                            id INT AUTO_INCREMENT PRIMARY KEY,
                            nome VARCHAR(100),
@@ -62,6 +63,8 @@ CREATE TABLE produto (
                          fk_categoria_id INT,
                          FOREIGN KEY (fk_categoria_id) REFERENCES categoria (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
+
+### CARRINHO DE COMPRA
 
 CREATE TABLE pedido (
                         id INT AUTO_INCREMENT PRIMARY KEY,

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
-<VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/fxml/1" xmlns:fx="http://javafx.com/fxml" fx:controller="com.warehouse.warehouse.PedidoController">
-    <Label text="Orders Section" style="-fx-font-size: 20px;"/>
-</VBox>

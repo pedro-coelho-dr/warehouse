@@ -1,46 +1,61 @@
 package com.warehouse.warehouse;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
+import javafx.event.ActionEvent;
 
 public class MainController {
 
-    @FXML
-    private void handleClientes() {
-        loadView("ClienteView.fxml");
+    public StackPane contentArea; // Make sure this is linked with fx:id in your MainView.fxml
+
+    // Methods to handle menu actions
+    public void novoPedido(ActionEvent event) {
+        loadView("NovoPedidoView");
     }
 
-    @FXML
-    private void handlePedidos() {
-        loadView("PedidoView.fxml");
+    public void pesquisarPedido(ActionEvent event) {
+        loadView("PesquisarPedidoView");
     }
 
-    @FXML
-    private void handleProdutos() {
-        loadView("ProdutoView.fxml");
+    public void adicionarProduto(ActionEvent event) {
+        loadView("AdicionarProdutoView");
     }
 
-    @FXML
-    private void handleFuncionarios() {
-        loadView("FuncionarioView.fxml");
+    public void pesquisarProduto(ActionEvent event) {
+        loadView("PesquisarProdutoView");
     }
 
-    @FXML
-    private void handleFornecedores() {
-        loadView("FornecedorView.fxml");
+    public void categoriaProduto(ActionEvent event) {
+        loadView("CategoriaProdutoView");
     }
 
-    private void loadView(String fxml) {
+    public void criarCliente(ActionEvent event) {
+        loadView("CriarClienteView");
+    }
+
+    public void pesquisarCliente(ActionEvent event) {
+        loadView("PesquisarClienteView");
+    }
+
+    public void adicionarFuncionario(ActionEvent event) {
+        loadView("AdicionarFuncionarioView");
+    }
+
+    public void pesquisarFuncionario(ActionEvent event) {
+        loadView("PesquisarFuncionarioView");
+    }
+
+    public void departamentoFuncionario(ActionEvent event) {
+        loadView("DepartamentoFuncionarioView");
+    }
+
+    // Method to load the view
+    private void loadView(String fxmlFile) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
+            Node view = loader.load();
+            contentArea.getChildren().setAll(view); // Replace the content in the content area
         } catch (Exception e) {
             e.printStackTrace();
         }

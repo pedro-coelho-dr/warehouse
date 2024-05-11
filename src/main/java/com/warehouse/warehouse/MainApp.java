@@ -15,6 +15,12 @@ public class MainApp extends Application {
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Warehouse Management System");
+
+
+        primaryStage.setMinWidth(800);  // Set minimum width
+        primaryStage.setMinHeight(600); // Set minimum height
+
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
