@@ -3,7 +3,8 @@ package com.warehouse.warehouse.entity;
 import java.time.LocalDateTime;
 
 public class Pessoa {
-    private int id;
+    private static int last_id = 0;
+    private int id; // Pensar em uma maneira de incrementar isso e passar adiante.
     private String nome;
     private String email;
     private String tipo;
@@ -19,6 +20,7 @@ public class Pessoa {
         this.email = email;
         this.tipo = tipo;
         this.cpf = cpf;
+        this.id = ++last_id;
     }
 
     public int getId() {
