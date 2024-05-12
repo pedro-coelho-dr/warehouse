@@ -64,25 +64,32 @@ CREATE TABLE produto (
                          FOREIGN KEY (fk_categoria_id) REFERENCES categoria (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-### CARRINHO DE COMPRA
-
 CREATE TABLE pedido (
                         id INT AUTO_INCREMENT PRIMARY KEY,
-                        valor DECIMAL(10,2),
+                        valor_total DECIMAL(10,2),
                         desconto DECIMAL(10,2),
-                        quantidade INT,
-                        status VARCHAR(50) CHECK (status IN ('Em Andamento', 'Finalizado', 'Cancelado')),
 
-                        fk_funcionario_id INT,
-                        fk_produto_id INT,
                         fk_cliente_id INT,
+                        fk_funcionario_id INT,
                         FOREIGN KEY (fk_cliente_id) REFERENCES cliente (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
                         FOREIGN KEY (fk_funcionario_id) REFERENCES funcionario (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                        FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
 
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+
+
+CREATE TABLE carrinho (
+                          quantidade INT,
+
+                          fk_pedido_id INT PRIMARY KEY,
+                          FOREIGN KEY (fk_pedido_id) REFERENCES pedido (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                          fk_produto_id INT,
+                          FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE
+
+);
+
 
 CREATE TABLE venda (
                        fk_pedido_id INT PRIMARY KEY,
@@ -92,9 +99,10 @@ CREATE TABLE venda (
 CREATE TABLE aluguel (
                          dt_devolucao DATE,
                          fk_pedido_id INT PRIMARY KEY,
-                         status VARCHAR(15) CHECK (status IN ('Entregue', 'Devolvido', 'Não Devolvido')),
+                         status VARCHAR(15) CHECK (status IN ('Entregue', 'Devolvido')),
                          FOREIGN KEY (fk_pedido_id) REFERENCES pedido (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 CREATE TABLE fornece (
                          preco_compra DECIMAL(10,2),
@@ -110,17 +118,6 @@ CREATE TABLE fornece (
                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE devolve (
-                         fk_cliente_id INT,
-                         fk_produto_id INT,
-                         dt_devolucao DATE,
-                         PRIMARY KEY (dt_devolucao, fk_produto_id, fk_cliente_id),
-                         FOREIGN KEY (fk_cliente_id) REFERENCES cliente (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                         FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-
-                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
 
 CREATE TABLE telefone (
                           id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,

@@ -1,5 +1,7 @@
 ##
 
+explicar setup, ferramentas do app
+
 ### Levantar/derrubar o banco de dados:
 ```bash
 docker compose up

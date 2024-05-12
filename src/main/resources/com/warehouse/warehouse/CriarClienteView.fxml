@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.CriarClienteController">
-    <Label fx:id="titleLabel" text="Departamento" style="-fx-font-size: 24px;" />
+<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.CriarClienteController">
+    <Label fx:id="titleLabel" text="Criar Cliente" style="-fx-font-size: 24px;" />
+
+    <Label text="Email:" />
+    <TextField fx:id="emailField" />
+
+    <Label text="Tipo:" />
+    <ChoiceBox fx:id="typeChoiceBox" />
+
+    <Label text="Nome:" />
+    <TextField fx:id="nomeField" />
+
+    <Label text="CPF:" />
+    <TextField fx:id="cpfField" />
+
+    <Label text="Razão Social:" />
+    <TextField fx:id="razaoSocialField" />
+
+    <Label text="CNPJ:" />
+    <TextField fx:id="cnpjField" />
+
+    <Label text="Inscrição Estadual:" />
+    <TextField fx:id="inscricaoEstadualField" />
+
+    <Button text="Salvar" onAction="#saveClient"/>
+    <Label fx:id="statusLabel" />
 </VBox>
