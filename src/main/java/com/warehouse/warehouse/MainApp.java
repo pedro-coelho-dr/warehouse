@@ -14,10 +14,10 @@ public class MainApp extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/com/warehouse/warehouse/MainView.fxml"));
 
         Scene scene = new Scene(root);
-        primaryStage.setTitle("Warehouse Management System");
+        primaryStage.setTitle("Armazém");
 
 
-        primaryStage.setMinWidth(800);  // Set minimum width
+        primaryStage.setMinWidth(100);  // Set minimum width
         primaryStage.setMinHeight(600); // Set minimum height
 
 

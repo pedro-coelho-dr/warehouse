@@ -6,7 +6,7 @@
     <Label fx:id="titleLabel" text="Pesquisar Cliente" style="-fx-font-size: 24px;" />
     <TextField fx:id="searchField" promptText="Enter ID or Name"/>
     <Button text="Search" onAction="#handleSearch"/>
-    <ListView fx:id="clientList" prefHeight="200.0" prefWidth="300.0"/>
+    <ListView fx:id="clientList" prefHeight="300.0" prefWidth="300.0"/>
     <Button text="Edit Selected" onAction="#handleEditSelected"/>
 </VBox>
 

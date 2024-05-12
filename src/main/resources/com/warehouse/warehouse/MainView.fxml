@@ -26,6 +26,6 @@
         </MenuBar>
     </top>
     <center>
-        <StackPane fx:id="contentArea" />
+        <StackPane alignment="TOP_LEFT" fx:id="contentArea" />
     </center>
 </BorderPane>
