@@ -17,8 +17,10 @@ public class CriarClienteController {
 
     // Pessoa
     @FXML private TextField emailField;
+
     @FXML private TextField nomeField;
     @FXML private TextField cpfField;
+
     @FXML private TextField razaoSocialField;
     @FXML private TextField cnpjField;
     @FXML private TextField inscricaoEstadualField;
@@ -120,17 +122,17 @@ public class CriarClienteController {
             stmt.setString(7, tipo.equals("PJ") ? inscricaoEstadualField.getText().trim() : null);
             stmt.executeUpdate();
 
-            // INSERIR CLIENTE
+
             generatedKeys = stmt.getGeneratedKeys();
             long pessoaId = 0;
             if (generatedKeys.next()) {
                 pessoaId = generatedKeys.getLong(1);
+
                 // Insert cliente
                 stmt.close();
                 stmt = conn.prepareStatement("INSERT INTO cliente (fk_pessoa_id) VALUES (?)");
                 stmt.setLong(1, pessoaId);
                 stmt.executeUpdate();
-
 
                 // Insert telefones
                 stmt.close();
@@ -145,7 +147,6 @@ public class CriarClienteController {
                         }
                     }
                 }
-
 
                 // Insert endereço
                 stmt.close();
