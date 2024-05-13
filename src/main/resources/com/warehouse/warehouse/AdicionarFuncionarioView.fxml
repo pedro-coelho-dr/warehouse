@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.AdicionarFuncionarioController">
-    <Label fx:id="titleLabel" text="Adicionar Funcionário" style="-fx-font-size: 24px;" />
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.AdicionarFuncionarioController">
+
+   <Label fx:id="titleLabel" style="-fx-font-size: 24px;" text="Adicionar Funcionário" />
+
+   <Label text="Nome" />
+   <TextField maxWidth="100" fx:id="nomeField"/>
+
+   <Label text="CPF" />
+   <TextField maxWidth="100" fx:id="cpfField"/>
+
+   <Label text="Email" />
+   <TextField maxWidth="200" fx:id="emailField"/>
+
+   <Label text="Data de contratação" />
+   <DatePicker fx:id="dtContratacaoDatePicker"/>
+
+   <Label text="Salario" />
+   <TextField maxWidth="100" fx:id="salarioField"/>
+
+   <Label text="Departamento" />
+   <ChoiceBox prefWidth="150.0" fx:id="departamentoChoiceBox"/>
+
 </VBox>
