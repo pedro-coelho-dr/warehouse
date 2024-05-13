@@ -16,13 +16,14 @@ public class MainApp extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/com/warehouse/warehouse/MainView.fxml"));
 
 
-       Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-       // primaryStage.setWidth(screenBounds.getWidth() * 0.8); // Set width to 80% of screen width
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        // primaryStage.setWidth(screenBounds.getWidth() * 0.8); // Set width to 80% of screen width
         primaryStage.setHeight(screenBounds.getHeight() * 0.8); // Set height to 80% of screen height
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Armazém");
 
+        //scene.getStylesheets().add(getClass().getResource("/resources/css/style.css").toExternalForm());
 
         primaryStage.setMinWidth(800);  // Set minimum width
         primaryStage.setMinHeight(600); // Set minimum height

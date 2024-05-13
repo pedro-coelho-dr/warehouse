@@ -1,4 +1,4 @@
-package com.warehouse.warehouse;
+package com.warehouse.warehouse.test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

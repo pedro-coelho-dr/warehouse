@@ -1,15 +1,15 @@
-package com.warehouse.warehouse;
+package com.warehouse.warehouse.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class CategoriaProdutoController {
+public class AdicionarFuncionarioController {
 
     @FXML
     private Label titleLabel;
 
     @FXML
     private void initialize() {
-        titleLabel.setText("Categoria de Produtos");
+        titleLabel.setText("Adicionar Funcionário");
     }
 }

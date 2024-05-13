@@ -2,7 +2,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.PesquisarClienteController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.PesquisarClienteController">
     <Label fx:id="titleLabel" text="Pesquisar Cliente" style="-fx-font-size: 24px;" />
     <TextField fx:id="searchField" promptText="Enter ID or Name"/>
     <Button text="Search" onAction="#handleSearch"/>
