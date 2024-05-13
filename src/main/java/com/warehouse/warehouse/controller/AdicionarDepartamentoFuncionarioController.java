@@ -1,2 +1,4 @@
-package com.warehouse.warehouse.controller;public class AdicionarDepartamentoFuncionarioController {
+package com.warehouse.warehouse.controller;
+
+public class AdicionarDepartamentoFuncionarioController {
 }

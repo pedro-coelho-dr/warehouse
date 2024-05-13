@@ -50,6 +50,10 @@ public class MainController {
         loadView("DepartamentoFuncionarioView");
     }
 
+    public void adicionarDepartamentoFuncionario(ActionEvent event) {
+        loadView("AdicionarDepartamentoFuncionarioView");
+    }
+
     // Method to load the view
     private void loadView(String fxmlFile) {
         try {

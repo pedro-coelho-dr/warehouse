@@ -8,7 +8,11 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+            fx:controller="com.warehouse.warehouse.controller.AdicionarDepartamentoFuncionarioController"
+            prefHeight="400.0" prefWidth="600.0">
 
 </AnchorPane>
+
+<VBox alignment="CENTER" spacing="20.0" >
+<Label fx:id="titleLabel" text="Adicionar Funcionário" style="-fx-font-size: 24px;" />
+</VBox>
