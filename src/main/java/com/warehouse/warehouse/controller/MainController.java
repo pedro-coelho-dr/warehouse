@@ -1,4 +1,4 @@
-package com.warehouse.warehouse;
+package com.warehouse.warehouse.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

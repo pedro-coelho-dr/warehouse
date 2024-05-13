@@ -1,5 +1,6 @@
-package com.warehouse.warehouse;
+package com.warehouse.warehouse.controller;
 
+import com.warehouse.warehouse.database.DatabaseConnector;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
