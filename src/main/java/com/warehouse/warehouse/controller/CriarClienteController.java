@@ -1,12 +1,15 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 
 import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class CriarClienteController {
 
@@ -23,7 +26,6 @@ public class CriarClienteController {
 
     @FXML private TextField razaoSocialField;
     @FXML private TextField cnpjField;
-    @FXML private TextField inscricaoEstadualField;
 
     // Telefone
     @FXML private VBox phoneContainer;
@@ -33,12 +35,17 @@ public class CriarClienteController {
     @FXML private TextField numeroField;
     @FXML private TextField bairroField;
     @FXML private TextField cidadeField;
-    @FXML private TextField estadoField;
+    @FXML private ComboBox<String> estadoComboBox;
     @FXML private TextField cepField;
-
 
     // Salvar
     @FXML private Label statusLabel;
+
+    private final List<String> estados = Arrays.asList(
+            "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+            "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+            "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+    );
 
     @FXML
     private void initialize() {
@@ -55,6 +62,9 @@ public class CriarClienteController {
                 updateFieldAccess(((RadioButton) newValue).getText());
             }
         });
+
+        // Initialize the ComboBox with Brazilian states
+        estadoComboBox.setItems(FXCollections.observableArrayList(estados));
     }
 
     private void updateFieldAccess(String type) {
@@ -64,12 +74,10 @@ public class CriarClienteController {
 
         razaoSocialField.setDisable(isPF);
         cnpjField.setDisable(isPF);
-        inscricaoEstadualField.setDisable(isPF);
 
         if (isPF) {
             razaoSocialField.clear();
             cnpjField.clear();
-            inscricaoEstadualField.clear();
         } else {
             nomeField.clear();
             cpfField.clear();
@@ -110,7 +118,7 @@ public class CriarClienteController {
 
             // INSERIR PESSOA
             stmt = conn.prepareStatement(
-                    "INSERT INTO pessoa (email, tipo, nome, cpf, razao_social, cnpj, inscricao_estadual) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO pessoa (email, tipo, nome, cpf, razao_social, cnpj) VALUES (?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             // NULL para PF U PJ
             stmt.setString(1, email);
@@ -119,7 +127,6 @@ public class CriarClienteController {
             stmt.setString(4, tipo.equals("PF") ? cpfField.getText().trim() : null);
             stmt.setString(5, tipo.equals("PJ") ? razaoSocialField.getText().trim() : null);
             stmt.setString(6, tipo.equals("PJ") ? cnpjField.getText().trim() : null);
-            stmt.setString(7, tipo.equals("PJ") ? inscricaoEstadualField.getText().trim() : null);
             stmt.executeUpdate();
 
 
@@ -155,7 +162,7 @@ public class CriarClienteController {
                 stmt.setInt(2, Integer.parseInt(numeroField.getText()));
                 stmt.setString(3, bairroField.getText());
                 stmt.setString(4, cidadeField.getText());
-                stmt.setString(5, estadoField.getText());
+                stmt.setString(5, estadoComboBox.getValue());
                 stmt.setString(6, cepField.getText());
                 stmt.setLong(7, pessoaId);
                 stmt.executeUpdate();

@@ -5,12 +5,11 @@ CREATE TABLE pessoa (
 
                         -- Pessoa Física
                         nome VARCHAR(100),
-                        cpf VARCHAR(14) UNIQUE,
+                        cpf VARCHAR(11) UNIQUE,
 
                         -- Pessoa Jurídica
                         razao_social VARCHAR(100),
-                        cnpj VARCHAR(20) UNIQUE,
-                        inscricao_estadual VARCHAR(50) UNIQUE,
+                        cnpj VARCHAR(14) UNIQUE,
 
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -58,7 +57,7 @@ CREATE TABLE produto (
                          descricao TEXT,
                          preco_venda DECIMAL(10,2),
                          preco_aluguel DECIMAL(10,2),
-                         quantidade_estoque INT,
+                         quantidade_estoque INT DEFAULT 0,
 
                          fk_categoria_id INT,
                          FOREIGN KEY (fk_categoria_id) REFERENCES categoria (id) ON DELETE SET NULL ON UPDATE CASCADE
@@ -137,7 +136,7 @@ CREATE TABLE endereco (
                           bairro VARCHAR(50),
                           cidade VARCHAR(50),
                           estado VARCHAR(2),
-                          cep VARCHAR(9),
+                          cep VARCHAR(8),
 
                           fk_pessoa_id INT,
                           FOREIGN KEY (fk_pessoa_id) REFERENCES pessoa (id) ON DELETE CASCADE ON UPDATE CASCADE,

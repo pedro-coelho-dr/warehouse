@@ -20,8 +20,6 @@
                     <TextField fx:id="razaoSocialField" maxWidth="280" />
                     <Label text="CNPJ:" />
                     <TextField fx:id="cnpjField" maxWidth="280" />
-                    <Label text="Inscrição Estadual:" />
-                    <TextField fx:id="inscricaoEstadualField" maxWidth="280" />
                 </VBox>
                 <VBox spacing="10" style="-fx-padding: 10;" minWidth="290" maxWidth="390">
                     <Label text="Email:" />
@@ -47,7 +45,7 @@
                     <Label text="Cidade:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                     <TextField fx:id="cidadeField" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="180"/>
                     <Label text="Estado:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-                    <TextField fx:id="estadoField" GridPane.rowIndex="1" GridPane.columnIndex="3" maxWidth="50"/>
+                    <ComboBox fx:id="estadoComboBox" GridPane.rowIndex="1" GridPane.columnIndex="3" maxWidth="100"/>
                     <Label text="CEP:" GridPane.rowIndex="1" GridPane.columnIndex="4"/>
                     <TextField fx:id="cepField" GridPane.rowIndex="1" GridPane.columnIndex="5" maxWidth="180"/>
                 </GridPane>
