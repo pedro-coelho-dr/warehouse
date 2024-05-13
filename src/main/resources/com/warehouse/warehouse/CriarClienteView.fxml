@@ -6,29 +6,29 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.CriarClienteController">
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.CriarClienteController" style="-fx-padding: 10px;">
     <Label fx:id="titleLabel" style="-fx-font-size: 24px;" text="Criar Cliente" />
-
-    <Label text="Email:" />
-    <TextField fx:id="emailField" />
 
     <Label text="Tipo:" />
     <ChoiceBox fx:id="typeChoiceBox" />
 
-    <Label text="Nome:" />
-    <TextField maxWidth="100" fx:id="nomeField" />
+    <Label text="Email:" />
+    <TextField maxWidth="300" fx:id="emailField" />
 
-    <Label text="CPF:" />
-    <TextField fx:id="cpfField" />
+    <Label fx:id="nomeLabel" text="Nome:" />
+    <TextField maxWidth="300" fx:id="nomeField" />
 
-    <Label text="Razão Social:" />
-    <TextField fx:id="razaoSocialField" />
+    <Label fx:id="cpfLabel" text="CPF:" />
+    <TextField maxWidth="100" fx:id="cpfField" />
 
-    <Label text="CNPJ:" />
-    <TextField fx:id="cnpjField" />
+    <Label fx:id="razaoLabel" text="Razão Social:" />
+    <TextField maxWidth="300" fx:id="razaoSocialField" />
 
-    <Label text="Inscrição Estadual:" />
-    <TextField fx:id="inscricaoEstadualField" />
+    <Label fx:id="cnpjLabel" text="CNPJ:" />
+    <TextField maxWidth="100" fx:id="cnpjField" />
+
+    <Label fx:id="inscricaoLabel" text="Inscrição Estadual:" />
+    <TextField maxWidth="300" fx:id="inscricaoEstadualField" />
 
     <Button onAction="#saveClient" text="Salvar" />
     <Label fx:id="statusLabel" />

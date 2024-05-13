@@ -8,12 +8,18 @@ import java.sql.*;
 public class CriarClienteController {
 
     @FXML private Label titleLabel;
-    @FXML private TextField emailField;
     @FXML private ChoiceBox<String> typeChoiceBox;
+    @FXML private Label emailLabel;
+    @FXML private TextField emailField;
+    @FXML private Label nomeLabel;
     @FXML private TextField nomeField;
+    @FXML private Label cpfLabel;
     @FXML private TextField cpfField;
+    @FXML private Label razaoLabel;
     @FXML private TextField razaoSocialField;
+    @FXML private Label cnpjLabel;
     @FXML private TextField cnpjField;
+    @FXML private Label inscricaoLabel;
     @FXML private TextField inscricaoEstadualField;
     @FXML private Label statusLabel;
 
@@ -24,16 +30,33 @@ public class CriarClienteController {
         typeChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updateFieldAccess(newVal);
         });
+        typeChoiceBox.setValue("PF");
     }
 
     private void updateFieldAccess(String type) {
         boolean isPF = type.equals("PF");
-        nomeField.setDisable(!isPF);
-        cpfField.setDisable(!isPF);
 
-        razaoSocialField.setDisable(isPF);
-        cnpjField.setDisable(isPF);
-        inscricaoEstadualField.setDisable(isPF);
+        nomeLabel.setVisible(isPF);
+        nomeLabel.setManaged(isPF);
+        nomeField.setVisible(isPF);
+        nomeField.setManaged(isPF);
+        cpfLabel.setVisible(isPF);
+        cpfLabel.setManaged(isPF);
+        cpfField.setVisible(isPF);
+        cpfField.setManaged(isPF);
+
+        razaoLabel.setVisible(!isPF);
+        razaoLabel.setManaged(!isPF);
+        razaoSocialField.setVisible(!isPF);
+        razaoSocialField.setManaged(!isPF);
+        cnpjLabel.setVisible(!isPF);
+        cnpjLabel.setManaged(!isPF);
+        cnpjField.setVisible(!isPF);
+        cnpjField.setManaged(!isPF);
+        inscricaoLabel.setVisible(!isPF);
+        inscricaoLabel.setManaged(!isPF);
+        inscricaoEstadualField.setVisible(!isPF);
+        inscricaoEstadualField.setManaged(!isPF);
 
         if (isPF) {
             razaoSocialField.clear();
