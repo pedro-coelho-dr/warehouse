@@ -17,7 +17,7 @@ Alternativamente, através do Docker Desktop `Containers -> warehouse_db -> Exec
 
 ### Abrir shell do mysql:
 ```bash
-mysql -uroot -padmin warehouse
+mysql -uroot -padmin
 ```
 
 ### Rodar os scripts init e populate
@@ -26,8 +26,8 @@ Use uma IDE, como IntelliJ, Dbeaver...
 
 Alternativamente, dentro do shell do mysql:
 ```bash
-source /opt/database_scripts/initdb.sql
+source /opt/db/initdb.sql
 ```
 ```bash
-source /opt/database_scripts/populatedb.sql
+source /opt/db/populatedb.sql
 ```
