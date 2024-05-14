@@ -49,7 +49,9 @@ public class MainController {
         loadView("FuncionarioDepartamentoView");
     }
 
+    public void adicionarDepartamentoFuncionario(ActionEvent event) { loadView("AdicionarDepartamentoFuncionarioView");}
 
+    // Method to load the view
     private void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
