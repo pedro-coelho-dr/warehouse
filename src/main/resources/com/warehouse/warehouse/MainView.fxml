@@ -24,6 +24,10 @@
                 <MenuItem text="Adicionar" onAction="#adicionarFuncionario"/>
                 <MenuItem text="Departamento" onAction="#departamentoFuncionario"/>
             </Menu>
+            <Menu text="Fornecedor">
+                <MenuItem text="Pesquisar" onAction="#pesquisarFornecedor"/>
+                <MenuItem text="Criar" onAction="#criarFornecedor"/>
+            </Menu>
         </MenuBar>
     </top>
     <center>

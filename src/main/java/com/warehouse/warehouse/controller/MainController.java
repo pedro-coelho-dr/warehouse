@@ -49,6 +49,13 @@ public class MainController {
         loadView("FuncionarioDepartamentoView");
     }
 
+    public void criarFornecedor(ActionEvent event) {
+        loadView("FornecedorCriarView");
+    }
+
+    public void pesquisarFornecedor(ActionEvent event) {
+        loadView("FornecedorPesquisarView");
+    }
 
     private void loadView(String fxmlFile) {
         try {
