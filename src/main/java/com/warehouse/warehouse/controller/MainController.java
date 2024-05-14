@@ -7,47 +7,46 @@ import javafx.event.ActionEvent;
 
 public class MainController {
 
-    public StackPane contentArea; // Make sure this is linked with fx:id in your MainView.fxml
+    public StackPane contentArea;
 
-    // Methods to handle menu actions
     public void novoPedido(ActionEvent event) {
-        loadView("NovoPedidoView");
+        loadView("PedidoNovoView");
     }
 
     public void pesquisarPedido(ActionEvent event) {
-        loadView("PesquisarPedidoView");
+        loadView("PedidoPesquisarView");
     }
 
     public void adicionarProduto(ActionEvent event) {
-        loadView("AdicionarProdutoView");
+        loadView("ProdutoAdicionarView");
     }
 
     public void pesquisarProduto(ActionEvent event) {
-        loadView("PesquisarProdutoView");
+        loadView("ProdutoPesquisarView");
     }
 
     public void categoriaProduto(ActionEvent event) {
-        loadView("CategoriaProdutoView");
+        loadView("ProdutoCategoriaView");
     }
 
     public void criarCliente(ActionEvent event) {
-        loadView("CriarClienteView");
+        loadView("ClienteCriarView");
     }
 
     public void pesquisarCliente(ActionEvent event) {
-        loadView("PesquisarClienteView");
+        loadView("ClientePesquisarView");
     }
 
     public void adicionarFuncionario(ActionEvent event) {
-        loadView("AdicionarFuncionarioView");
+        loadView("FuncionarioAdicionarView");
     }
 
     public void pesquisarFuncionario(ActionEvent event) {
-        loadView("PesquisarFuncionarioView");
+        loadView("FuncionarioPesquisarView");
     }
 
     public void departamentoFuncionario(ActionEvent event) {
-        loadView("DepartamentoFuncionarioView");
+        loadView("FuncionarioDepartamentoView");
     }
 
     public void adicionarDepartamentoFuncionario(ActionEvent event) { loadView("AdicionarDepartamentoFuncionarioView");}
@@ -57,8 +56,8 @@ public class MainController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
             Node view = loader.load();
-            if (fxmlFile.equals("PesquisarClienteView")) {
-                PesquisarClienteController controller = loader.getController();
+            if (fxmlFile.equals("ClientePesquisarView")) {
+                ClientePesquisarController controller = loader.getController();
                 controller.setMainController(this);
             }
             contentArea.getChildren().setAll(view);
@@ -70,8 +69,8 @@ public class MainController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
             Node view = loader.load();
-            if (fxmlFile.equals("EditarClienteView")) {
-                EditarClienteController controller = loader.getController();
+            if (fxmlFile.equals("ClienteEditarView")) {
+                ClienteEditarController controller = loader.getController();
                 controller.setSelectedClientId(clientId);
             }
             contentArea.getChildren().setAll(view);

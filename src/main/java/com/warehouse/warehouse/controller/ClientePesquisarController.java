@@ -9,7 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.*;
 
-public class PesquisarClienteController {
+public class ClientePesquisarController {
 
     @FXML private Label titleLabel;
     @FXML private TextField searchNameField, searchIdField, searchCpfField;
@@ -83,7 +83,7 @@ public class PesquisarClienteController {
 
         if (selectedClientInfo != null && mainController != null) {
             long clientId = Long.parseLong(selectedClientInfo.split(" - ")[0].split(": ")[1]);
-            mainController.loadViewWithClient("EditarClienteView", clientId);
+            mainController.loadViewWithClient("ClienteEditarView", clientId);
         }
     }
 }

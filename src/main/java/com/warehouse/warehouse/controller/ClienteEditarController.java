@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class EditarClienteController {
+public class ClienteEditarController {
 
     @FXML private TextField nomeField, cpfField, razaoSocialField, cnpjField;
     @FXML private TextField emailField, ruaField, numeroField, bairroField, cidadeField, cepField;

@@ -1,3 +1,9 @@
+CREATE DATABASE IF NOT EXISTS warehouse
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+USE warehouse;
+
 CREATE TABLE pessoa (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         email VARCHAR(100) UNIQUE,

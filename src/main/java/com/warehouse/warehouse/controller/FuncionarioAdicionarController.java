@@ -3,7 +3,7 @@ package com.warehouse.warehouse.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-public class AdicionarFuncionarioController {
+public class FuncionarioAdicionarController {
 
     @FXML private Label titleLabel;
     @FXML private TextField emailField;

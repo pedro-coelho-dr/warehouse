@@ -3,7 +3,7 @@ package com.warehouse.warehouse.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class AdicionarProdutoController {
+public class ProdutoAdicionarController {
 
     @FXML
     private Label titleLabel;
