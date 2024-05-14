@@ -50,16 +50,31 @@ public class MainController {
         loadView("DepartamentoFuncionarioView");
     }
 
-    public void adicionarDepartamentoFuncionario(ActionEvent event) {
-        loadView("AdicionarDepartamentoFuncionarioView");
-    }
+    public void adicionarDepartamentoFuncionario(ActionEvent event) { loadView("AdicionarDepartamentoFuncionarioView");}
 
     // Method to load the view
     private void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
             Node view = loader.load();
-            contentArea.getChildren().setAll(view); // Replace the content in the content area
+            if (fxmlFile.equals("PesquisarClienteView")) {
+                PesquisarClienteController controller = loader.getController();
+                controller.setMainController(this);
+            }
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadViewWithClient(String fxmlFile, long clientId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
+            Node view = loader.load();
+            if (fxmlFile.equals("EditarClienteView")) {
+                EditarClienteController controller = loader.getController();
+                controller.setSelectedClientId(clientId);
+            }
+            contentArea.getChildren().setAll(view);
         } catch (Exception e) {
             e.printStackTrace();
         }
