@@ -63,16 +63,19 @@ public class MainController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
             Node view = loader.load();
-            if (fxmlFile.equals("ClientePesquisarView")) {
-                ClientePesquisarController controller = loader.getController();
-                controller.setMainController(this);
+            Object controller = loader.getController();
+            if (controller instanceof ClientePesquisarController) {
+                ((ClientePesquisarController) controller).setMainController(this);
+            } else if (controller instanceof FornecedorPesquisarController) {
+                ((FornecedorPesquisarController) controller).setMainController(this);
             }
             contentArea.getChildren().setAll(view);
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error loading " + fxmlFile + ": " + e.getMessage());
         }
     }
-    public void loadViewWithClient(String fxmlFile, long clientId) {
+    public void loadViewCliente(String fxmlFile, long clientId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
             Node view = loader.load();
@@ -85,4 +88,18 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    public void loadViewFornecedor(String fxmlFile, long fornecedorId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
+            Node view = loader.load();
+            if (fxmlFile.equals("FornecedorEditarView")) {
+                FornecedorEditarController controller = loader.getController();
+                controller.setSelectedFornecedorId(fornecedorId);
+            }
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

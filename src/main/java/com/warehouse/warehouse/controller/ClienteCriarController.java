@@ -63,7 +63,6 @@ public class ClienteCriarController {
             }
         });
 
-        // Initialize the ComboBox with Brazilian states
         estadoComboBox.setItems(FXCollections.observableArrayList(estados));
     }
 
