@@ -2,51 +2,62 @@ package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class DepartamentoCriarController {
 
-//    campos de texto
-    @FXML
-    private Label titleLabel;
     @FXML
     private TextField nomeField;
-    @FXML
-    private TextField descricaoField;
-    @FXML
-    private Button saveButton;
 
     @FXML
-    private void saveDepartamento() {
+    private TextArea descricaoField;
+
+    @FXML
+    private Label statusLabel;
+
+    @FXML
+    private void saveDepartamento(ActionEvent event) {
         String nome = nomeField.getText().trim();
         String descricao = descricaoField.getText().trim();
 
-        try (Connection connection = DatabaseConnector.getConnection()) {
-            // Create the SQL statement
-            String sql = "INSERT INTO departamento (nome, descricao) VALUES (?, ?)";
+        if (nome.isEmpty() || descricao.isEmpty()) {
+            statusLabel.setText("Por favor, preencha todos os campos.");
+            return;
+        }
 
-            // Create a PreparedStatement to execute the SQL statement
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                // Set the parameters for the PreparedStatement
-                stmt.setString(1, nome);
-                stmt.setString(2, descricao);
+        Connection conn = null;
+        PreparedStatement stmt = null;
 
-                // Execute the query
-                int rowsAffected = stmt.executeUpdate();
+        try {
+            conn = DatabaseConnector.getConnection();
+            conn.setAutoCommit(false); // transaction
 
-                // Check if the insertion was successful
-                if (rowsAffected > 0) {
-                    System.out.println("Departamento inserido com sucesso!");
-                } else {
-                    System.out.println("Falha ao inserir departamento.");
-                }
-            }
+            stmt = conn.prepareStatement("INSERT INTO departamento (nome, descricao) VALUES (?, ?)");
+            stmt.setString(1, nome);
+            stmt.setString(2, descricao);
+            stmt.executeUpdate();
+
+            conn.commit();
+            statusLabel.setText("Departamento criado com sucesso.");
+
         } catch (SQLException ex) {
-            // Handle any SQL exceptions
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException se2) {
+                ex.printStackTrace();
+            }
             ex.printStackTrace();
+            statusLabel.setText("Erro ao conectar com o banco de dados.");
+        } finally {
+            if (stmt != null) try { stmt.close(); } catch (SQLException ex) { /* Ignored */ }
+            if (conn != null) try { conn.close(); } catch (SQLException ex) { /* Ignored */ }
         }
     }
-
 }

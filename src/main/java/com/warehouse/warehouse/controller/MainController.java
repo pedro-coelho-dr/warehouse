@@ -21,8 +21,12 @@ public class MainController {
         loadView("ProdutoPesquisarView");
     }
 
-    public void categoriaProduto(ActionEvent event) {
-        loadView("ProdutoCategoriaView");
+    public void categoriaPesquisar(ActionEvent event) {
+        loadView("CategoriaPesquisarView");
+    }
+
+    public void categoriaCriar(ActionEvent event) {
+        loadView("CategoriaCriarView");
     }
 
     public void criarCliente(ActionEvent event) {
@@ -33,16 +37,12 @@ public class MainController {
         loadView("ClientePesquisarView");
     }
 
-    public void adicionarFuncionario(ActionEvent event) {
-        loadView("FuncionarioAdicionarView");
+    public void criarFuncionario(ActionEvent event) {
+        loadView("FuncionarioCriarView");
     }
 
     public void pesquisarFuncionario(ActionEvent event) {
         loadView("FuncionarioPesquisarView");
-    }
-
-    public void departamentoFuncionario(ActionEvent event) {
-        loadView("FuncionarioDepartamentoView");
     }
 
     public void departamentoCriar(ActionEvent event) { loadView("DepartamentoCriarView");}
@@ -66,6 +66,10 @@ public class MainController {
                 ((ClientePesquisarController) controller).setMainController(this);
             } else if (controller instanceof FornecedorPesquisarController) {
                 ((FornecedorPesquisarController) controller).setMainController(this);
+            } else if (controller instanceof DepartamentoPesquisarController) {
+                ((DepartamentoPesquisarController) controller).setMainController(this);
+            } else if (controller instanceof FuncionarioPesquisarController) {
+                ((FuncionarioPesquisarController) controller).setMainController(this);
             }
             contentArea.getChildren().setAll(view);
         } catch (Exception e) {
@@ -100,4 +104,31 @@ public class MainController {
         }
     }
 
+    public void loadViewDepartamento(String fxmlFile, long departamentoId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
+            Node view = loader.load();
+            if (fxmlFile.equals("DepartamentoEditarView")) {
+                DepartamentoEditarController controller = loader.getController();
+                controller.setSelectedDepartamentoId(departamentoId);
+            }
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadViewFuncionario(String fxmlFile, long funcionarioId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
+            Node view = loader.load();
+            if (fxmlFile.equals("FuncionarioEditarView")) {
+                FuncionarioEditarController controller = loader.getController();
+                controller.setSelectedFuncionarioId(funcionarioId);
+            }
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+

@@ -42,6 +42,8 @@ public class ClientePesquisarController {
             sql.append(" AND (pessoa.cpf LIKE ? OR pessoa.cnpj LIKE ?)");
         }
 
+        sql.append(" ORDER BY pessoa.id");
+
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
 
