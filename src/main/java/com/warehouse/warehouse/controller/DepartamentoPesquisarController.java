@@ -87,7 +87,7 @@ public class DepartamentoPesquisarController {
 
         if (selectedClientInfo != null && mainController != null) {
             long clientId = Long.parseLong(selectedClientInfo.split(" - ")[0].split(": ")[1]);
-            mainController.loadViewWithClient("ClienteEditarView", clientId);
+            mainController.loadViewCliente("ClienteEditarView", clientId);
         }
     }
 }
