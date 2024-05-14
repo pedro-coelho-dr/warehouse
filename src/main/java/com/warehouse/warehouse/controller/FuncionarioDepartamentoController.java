@@ -3,13 +3,13 @@ package com.warehouse.warehouse.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class PesquisarFuncionarioController {
+public class FuncionarioDepartamentoController {
 
     @FXML
     private Label titleLabel;
 
     @FXML
     private void initialize() {
-        titleLabel.setText("Pesquisar Funcionário");
+        titleLabel.setText("Departamento de Funcionários");
     }
 }

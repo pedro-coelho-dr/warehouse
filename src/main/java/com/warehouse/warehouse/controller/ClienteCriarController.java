@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class CriarClienteController {
+public class ClienteCriarController {
 
     // PF U PJ?
     @FXML private RadioButton pfRadioButton;
