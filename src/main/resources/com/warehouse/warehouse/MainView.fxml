@@ -33,6 +33,10 @@
             <Menu text="Fornecedor">
                 <MenuItem text="Pesquisar" onAction="#pesquisarFornecedor"/>
                 <MenuItem text="Criar" onAction="#criarFornecedor"/>
+                <Menu text="Fornecimento">
+                    <MenuItem text="Pesquisar" onAction="#fornecimentoPesquisar"/>
+                    <MenuItem text="Criar" onAction="#fornecimentoCriar"/>
+                </Menu>
             </Menu>
         </MenuBar>
     </top>

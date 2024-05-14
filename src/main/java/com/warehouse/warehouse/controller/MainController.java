@@ -57,6 +57,14 @@ public class MainController {
         loadView("FornecedorPesquisarView");
     }
 
+    public void fornecimentoPesquisar(ActionEvent event) {
+        loadView("FornecimentoPesquisarView");
+    }
+
+    public void fornecimentoCriar(ActionEvent event) {
+        loadView("FornecimentoCriarView");
+    }
+
     private void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
