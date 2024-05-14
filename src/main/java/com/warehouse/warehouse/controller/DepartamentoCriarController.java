@@ -1,17 +1,12 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.List;
 
-public class AdicionarDepartamentoFuncionarioController {
+public class DepartamentoCriarController {
 
 //    campos de texto
     @FXML

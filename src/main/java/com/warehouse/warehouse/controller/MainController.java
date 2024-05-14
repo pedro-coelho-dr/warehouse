@@ -9,13 +9,9 @@ public class MainController {
 
     public StackPane contentArea;
 
-    public void novoPedido(ActionEvent event) {
-        loadView("PedidoNovoView");
-    }
+    public void novoPedido(ActionEvent event) { loadView("PedidoNovoView");}
 
-    public void pesquisarPedido(ActionEvent event) {
-        loadView("PedidoPesquisarView");
-    }
+    public void pesquisarPedido(ActionEvent event) { loadView("PedidoPesquisarView");}
 
     public void adicionarProduto(ActionEvent event) {
         loadView("ProdutoAdicionarView");
@@ -49,7 +45,9 @@ public class MainController {
         loadView("FuncionarioDepartamentoView");
     }
 
-    public void adicionarDepartamentoFuncionario(ActionEvent event) { loadView("AdicionarDepartamentoFuncionarioView");}
+    public void departamentoCriar(ActionEvent event) { loadView("DepartamentoCriarView");}
+
+    public void departamentoPesquisar(ActionEvent event) { loadView("DepartamentoPesquisarView");}
 
     // Method to load the view
     private void loadView(String fxmlFile) {

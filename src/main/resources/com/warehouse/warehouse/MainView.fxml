@@ -22,8 +22,8 @@
             <Menu text="Funcionário">
                 <MenuItem text="Pesquisar" onAction="#pesquisarFuncionario"/>
                 <MenuItem text="Adicionar" onAction="#adicionarFuncionario"/>
-                <MenuItem text="Departamento" onAction="#departamentoFuncionario"/>
-                <MenuItem text="Adicionar Departamento" onAction="#adicionarDepartamentoFuncionario"/>
+                <MenuItem text="Departamento" onAction="#departamentoPesquisar"/>
+                <MenuItem text="Adicionar Departamento" onAction="#departamentoCriar"/>
 
             </Menu>
         </MenuBar>

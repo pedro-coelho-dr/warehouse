@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.AdicionarDepartamentoFuncionarioController">
+<VBox spacing="10" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.DepartamentoCriarController">
 
     <Label fx:id="titleLabel" style="-fx-font-size: 24px;" text="Novo Departamento" />
 
