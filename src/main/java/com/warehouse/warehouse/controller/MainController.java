@@ -49,6 +49,8 @@ public class MainController {
         loadView("FuncionarioDepartamentoView");
     }
 
+    public void adicionarDepartamentoFuncionario(ActionEvent event) { loadView("AdicionarDepartamentoFuncionarioView");}
+
     public void criarFornecedor(ActionEvent event) {
         loadView("FornecedorCriarView");
     }
