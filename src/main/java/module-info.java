@@ -14,6 +14,6 @@ module com.warehouse.warehouse {
     opens com.warehouse.warehouse.controller to javafx.fxml;
     exports com.warehouse.warehouse.database;
     opens com.warehouse.warehouse.database to javafx.fxml;
-    exports com.warehouse.warehouse.test;
-    opens com.warehouse.warehouse.test to javafx.fxml;
+    exports com.warehouse.warehouse.scrap;
+    opens com.warehouse.warehouse.scrap to javafx.fxml;
 }
