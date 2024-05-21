@@ -41,10 +41,6 @@ public class MainController {
         loadView("FuncionarioPesquisarView");
     }
 
-    public void departamentoFuncionario(ActionEvent event) {
-        loadView("FuncionarioDepartamentoView");
-    }
-
     public void departamentoCriar(ActionEvent event) { loadView("DepartamentoCriarView");}
 
     public void departamentoPesquisar(ActionEvent event) { loadView("DepartamentoPesquisarView");}
@@ -68,6 +64,20 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
             Node view = loader.load();
             if (fxmlFile.equals("ClienteEditarView")) {
+                ClienteEditarController controller = loader.getController();
+                controller.setSelectedClientId(clientId);
+            }
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadViewWithObj(String fxmlFile, Object obj) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
+            Node view = loader.load();
+            if (fxmlFile.equals("DepartamentoEditarView")) {
                 ClienteEditarController controller = loader.getController();
                 controller.setSelectedClientId(clientId);
             }

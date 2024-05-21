@@ -17,8 +17,10 @@ public class DepartamentoPesquisarController {
 
     @FXML
     private Label titleLabel;
-    @FXML private TextField searchNameField, searchIdField, searchCpfField;
-    @FXML private ListView<String> clientList;
+    @FXML
+    private TextField searchNameField, searchIdField;
+    @FXML
+    private ListView<String> departamentoList;
 
     private MainController mainController;
 
@@ -28,22 +30,19 @@ public class DepartamentoPesquisarController {
 
     @FXML
     private void initialize() {
-        clientList.setItems(FXCollections.observableArrayList());
+        departamentoList.setItems(FXCollections.observableArrayList());
     }
 
     @FXML
     private void handleSearch() {
-        ObservableList<String> clients = FXCollections.observableArrayList();
-        StringBuilder sql = new StringBuilder("SELECT pessoa.id, pessoa.nome, pessoa.cpf, pessoa.razao_social, pessoa.cnpj, pessoa.tipo FROM pessoa JOIN cliente ON pessoa.id = cliente.fk_pessoa_id WHERE 1=1");
+        ObservableList<String> departamentosOlist = FXCollections.observableArrayList();
+        StringBuilder sql = new StringBuilder("SELECT departamento.id, departamento.nome FROM departamento WHERE 1=1");
 
         if (!searchNameField.getText().isEmpty()) {
-            sql.append(" AND (LOWER(pessoa.nome) LIKE ? OR LOWER(pessoa.razao_social) LIKE ?)");
+            sql.append(" AND LOWER(departamento.nome) LIKE ?");
         }
         if (!searchIdField.getText().isEmpty()) {
-            sql.append(" AND CAST(pessoa.id AS CHAR) LIKE ?");
-        }
-        if (!searchCpfField.getText().isEmpty()) {
-            sql.append(" AND (pessoa.cpf LIKE ? OR pessoa.cnpj LIKE ?)");
+            sql.append(" AND CAST(departamento.id AS CHAR) LIKE ?");
         }
 
         try (Connection conn = DatabaseConnector.getConnection();
@@ -51,31 +50,23 @@ public class DepartamentoPesquisarController {
 
             int index = 1;
             if (!searchNameField.getText().isEmpty()) {
-                String searchText = "%" + searchNameField.getText().toLowerCase() + "%";
-                stmt.setString(index++, searchText);
+                String searchText = "%" + searchNameField.getText().strip().toLowerCase() + "%";
                 stmt.setString(index++, searchText);
             }
             if (!searchIdField.getText().isEmpty()) {
-                stmt.setString(index++, "%" + searchIdField.getText() + "%");
-            }
-            if (!searchCpfField.getText().isEmpty()) {
-                String searchCpfCnpj = "%" + searchCpfField.getText() + "%";
-                stmt.setString(index++, searchCpfCnpj);
-                stmt.setString(index, searchCpfCnpj);
+                stmt.setString(index++, "%" + searchIdField.getText().strip() + "%");
             }
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String displayText;
-                if ("PF".equals(rs.getString("tipo"))) {
-                    displayText = String.format("ID: %d - Nome: %s - CPF: %s", rs.getInt("id"), rs.getString("nome"), rs.getString("cpf"));
-                } else {
-                    displayText = String.format("ID: %d - Razão Social: %s - CNPJ: %s", rs.getInt("id"), rs.getString("razao_social"), rs.getString("cnpj"));
-                }
-                clients.add(displayText);
+
+                displayText = String.format("ID: %d - Nome: %s", rs.getInt("id"), rs.getString("nome"));
+
+                departamentosOlist.add(displayText);
             }
 
-            clientList.setItems(clients);
+            departamentoList.setItems(departamentosOlist);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -83,11 +74,11 @@ public class DepartamentoPesquisarController {
 
     @FXML
     private void handleEditSelected() {
-        String selectedClientInfo = clientList.getSelectionModel().getSelectedItem();
+        String selectedDepartamento = departamentoList.getSelectionModel().getSelectedItem();
 
-        if (selectedClientInfo != null && mainController != null) {
-            long clientId = Long.parseLong(selectedClientInfo.split(" - ")[0].split(": ")[1]);
-            mainController.loadViewWithClient("ClienteEditarView", clientId);
+        if (selectedDepartamento != null && mainController != null) {
+            long departamentoId = Long.parseLong(selectedDepartamento.split(" - ")[0].split(": ")[1]);
+            mainController.loadViewWithClient("ClienteEditarView", departamentoId);
         }
     }
 }

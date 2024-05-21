@@ -22,7 +22,7 @@
                 </VBox>
 
                 <VBox maxWidth="390" minWidth="390" spacing="10" style="-fx-padding: 10;">
-                    <ListView fx:id="clientList" prefHeight="400" prefWidth="390" />
+                    <ListView fx:id="departamentoList" prefHeight="400" prefWidth="390" />
                     <Button maxWidth="80" onAction="#handleEditSelected" text="Editar" />
                 </VBox>
 
