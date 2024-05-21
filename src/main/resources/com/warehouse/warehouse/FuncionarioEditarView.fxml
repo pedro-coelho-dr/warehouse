@@ -1,67 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.warehouse.warehouse.controller.FuncionarioEditarController"
-      style="-fx-padding: 20;">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FuncionarioEditarController">
     <Label fx:id="titleLabel" style="-fx-font-size: 24px;" text="Editar Funcionário" />
-    <ScrollPane fitToWidth="true" fitToHeight="true" minWidth="700" maxWidth="700" vbarPolicy="AS_NEEDED" hbarPolicy="AS_NEEDED">
+    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" maxWidth="700" minWidth="700" vbarPolicy="AS_NEEDED">
         <VBox alignment="TOP_LEFT" maxWidth="700">
-            <HBox spacing="20" maxWidth="780" alignment="CENTER_LEFT">
-                <VBox spacing="10" style="-fx-padding: 10;" minWidth="290" maxWidth="390">
-                    <RadioButton fx:id="pfRadioButton" text="Pessoa Física" toggleGroup="$typeToggleGroup"/>
+            <HBox alignment="CENTER_LEFT" maxWidth="780" prefHeight="106.0" prefWidth="685.0" spacing="20">
+                <VBox maxWidth="390" minWidth="290" spacing="10" style="-fx-padding: 10;">
+                    <RadioButton fx:id="pfRadioButton" text="Pessoa Física">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="typeToggleGroup" />
+                  </toggleGroup></RadioButton>
                     <Label text="Nome:" />
                     <TextField fx:id="nomeField" maxWidth="280" />
                     <Label text="CPF:" />
                     <TextField fx:id="cpfField" maxWidth="280" />
-                    <RadioButton fx:id="pjRadioButton" text="Pessoa Jurídica" toggleGroup="$typeToggleGroup"/>
-                    <Label text="Razão Social:" />
-                    <TextField fx:id="razaoSocialField" maxWidth="280" />
-                    <Label text="CNPJ:" />
-                    <TextField fx:id="cnpjField" maxWidth="280" />
                 </VBox>
-                <VBox spacing="10" style="-fx-padding: 10;" minWidth="290" maxWidth="390">
+                <VBox maxWidth="390" minWidth="290" spacing="10" style="-fx-padding: 10;">
                     <Label text="Email:" />
                     <TextField fx:id="emailField" maxWidth="280" />
                     <Label text="Telefone:" />
                     <VBox fx:id="phoneContainer" spacing="5">
                         <TextField fx:id="telefoneField" maxWidth="280" promptText="Telefone" />
                     </VBox>
-                    <Button alignment="CENTER" text="+" onAction="#addPhoneField" maxWidth="30"/>
-                    <Button alignment="CENTER" text="-" onAction="#removePhoneField" maxWidth="30" />
+                    <HBox prefHeight="100.0" prefWidth="200.0">
+                        <children>
+                            <Button alignment="CENTER" maxWidth="30" onAction="#addPhoneField" text="+" />
+                            <Separator opacity="0.0" orientation="VERTICAL" prefHeight="200.0" />
+                            <Button alignment="CENTER" maxWidth="30" minWidth="25" onAction="#removePhoneField" text="-" />
+                        </children>
+                    </HBox>
                 </VBox>
             </HBox>
             <Separator maxWidth="Infinity" />
-            <HBox spacing="20" maxWidth="700" alignment="CENTER_LEFT">
-                <GridPane hgap="10" vgap="10" style="-fx-padding: 10;" maxWidth="760">
-                    <Label text="Rua:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                    <TextField fx:id="ruaField" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="180"/>
-                    <Label text="Número:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-                    <TextField fx:id="numeroField" GridPane.rowIndex="0" GridPane.columnIndex="3" maxWidth="50"/>
-                    <Label text="Bairro:" GridPane.rowIndex="0" GridPane.columnIndex="4"/>
-                    <TextField fx:id="bairroField" GridPane.rowIndex="0" GridPane.columnIndex="5" maxWidth="180"/>
+            <HBox alignment="CENTER_LEFT" maxWidth="700" spacing="20">
+                <GridPane hgap="10" maxWidth="760" style="-fx-padding: 10;" vgap="10">
+                    <Label text="Rua:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField fx:id="ruaField" maxWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label text="Número:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <TextField fx:id="numeroField" maxWidth="50" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                    <Label text="Bairro:" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                    <TextField fx:id="bairroField" maxWidth="180" GridPane.columnIndex="5" GridPane.rowIndex="0" />
 
-                    <Label text="Cidade:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <TextField fx:id="cidadeField" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="180"/>
-                    <Label text="Estado:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-                    <ComboBox fx:id="estadoComboBox" GridPane.rowIndex="1" GridPane.columnIndex="3" maxWidth="100"/>
-                    <Label text="CEP:" GridPane.rowIndex="1" GridPane.columnIndex="4"/>
-                    <TextField fx:id="cepField" GridPane.rowIndex="1" GridPane.columnIndex="5" maxWidth="180"/>
+                    <Label text="Cidade:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <TextField fx:id="cidadeField" maxWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label text="Estado:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="estadoComboBox" maxWidth="100" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <Label text="CEP:" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                    <TextField fx:id="cepField" maxWidth="180" GridPane.columnIndex="5" GridPane.rowIndex="1" />
                 </GridPane>
             </HBox>
             <Separator maxWidth="Infinity" />
-            <HBox spacing="20" maxWidth="780" alignment="CENTER_LEFT">
-                <VBox spacing="10" style="-fx-padding: 10;" minWidth="290" maxWidth="390">
+            <HBox alignment="CENTER_LEFT" maxWidth="780" spacing="20">
+                <VBox maxWidth="390" minWidth="290" spacing="10" style="-fx-padding: 10;">
                     <Label text="Data de Contratação:" />
                     <DatePicker fx:id="dataContratacaoPicker" maxWidth="280" />
                     <Label text="Salário:" />
                     <TextField fx:id="salarioField" maxWidth="280" />
                     <Label text="Status:" />
-                    <RadioButton fx:id="ativoRadioButton" text="Ativo" toggleGroup="$statusToggleGroup" selected="true" />
+                    <RadioButton fx:id="ativoRadioButton" selected="true" text="Ativo">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="statusToggleGroup" />
+                  </toggleGroup></RadioButton>
                     <RadioButton fx:id="inativoRadioButton" text="Inativo" toggleGroup="$statusToggleGroup" />
                 </VBox>
-                <VBox spacing="10" style="-fx-padding: 10;" minWidth="290" maxWidth="390">
+                <VBox maxWidth="390" minWidth="290" spacing="10" style="-fx-padding: 10;">
                     <Label text="Departamento:" />
                     <ComboBox fx:id="departamentoComboBox" maxWidth="280" />
                     <Label text="Gerente:" />
@@ -71,5 +88,5 @@
         </VBox>
     </ScrollPane>
     <Label fx:id="statusLabel" />
-    <Button onAction="#updateFuncionario" text="Atualizar" maxWidth="100" alignment="CENTER" styleClass="save-button"/>
+    <Button alignment="CENTER" maxWidth="100" onAction="#updateFuncionario" styleClass="save-button" text="Atualizar" />
 </VBox>

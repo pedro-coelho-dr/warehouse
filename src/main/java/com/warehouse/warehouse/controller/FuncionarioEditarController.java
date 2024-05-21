@@ -40,7 +40,6 @@ public class FuncionarioEditarController {
     private void initialize() {
         typeToggleGroup = new ToggleGroup();
         pfRadioButton.setToggleGroup(typeToggleGroup);
-        pjRadioButton.setToggleGroup(typeToggleGroup);
         typeToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> updateFieldAccess(((RadioButton) newValue).getText()));
         estadoComboBox.getItems().addAll(estados);
         statusToggleGroup = new ToggleGroup();
@@ -128,7 +127,6 @@ public class FuncionarioEditarController {
              PreparedStatement stmt = conn.prepareStatement("SELECT id, nome FROM departamento")) {
 
             ResultSet rs = stmt.executeQuery();
-            departamentoComboBox.getItems().add("Nenhum");
             while (rs.next()) {
                 departamentoComboBox.getItems().add(rs.getString("id") + " - " + rs.getString("nome"));
             }
@@ -144,7 +142,6 @@ public class FuncionarioEditarController {
              PreparedStatement stmt = conn.prepareStatement("SELECT fk_pessoa_id, nome FROM funcionario JOIN pessoa ON funcionario.fk_pessoa_id = pessoa.id WHERE fk_departamento_id IS NOT NULL")) {
 
             ResultSet rs = stmt.executeQuery();
-            gerenteComboBox.getItems().add("Nenhum");
             while (rs.next()) {
                 gerenteComboBox.getItems().add(rs.getString("fk_pessoa_id") + " - " + rs.getString("nome"));
             }
@@ -174,11 +171,13 @@ public class FuncionarioEditarController {
         }
     }
 
+
     @FXML
     private void updateFuncionario() {
-        String sqlUpdatePerson = "UPDATE pessoa SET email=?, nome=?, cpf=?, razao_social=?, cnpj=?, tipo=? WHERE id=?";
+        String sqlUpdatePerson = "UPDATE pessoa SET email=?, nome=?, cpf=?, razao_social=null, cnpj=null, tipo='PF' WHERE id=?";
         String sqlUpdateAddress = "UPDATE endereco SET rua=?, numero=?, bairro=?, cidade=?, estado=?, cep=? WHERE fk_pessoa_id=?";
         String sqlUpdateFuncionario = "UPDATE funcionario SET data_de_contratacao=?, salario=?, status=?, fk_departamento_id=?, gerente_fk_funcionario_id=? WHERE fk_pessoa_id=?";
+
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmtPerson = conn.prepareStatement(sqlUpdatePerson);
              PreparedStatement stmtAddress = conn.prepareStatement(sqlUpdateAddress);
@@ -188,12 +187,9 @@ public class FuncionarioEditarController {
 
             // Update person
             stmtPerson.setString(1, emailField.getText());
-            stmtPerson.setString(2, pfRadioButton.isSelected() ? nomeField.getText() : null);
-            stmtPerson.setString(3, pfRadioButton.isSelected() ? cpfField.getText() : null);
-            stmtPerson.setString(4, pjRadioButton.isSelected() ? razaoSocialField.getText() : null);
-            stmtPerson.setString(5, pjRadioButton.isSelected() ? cnpjField.getText() : null);
-            stmtPerson.setString(6, pfRadioButton.isSelected() ? "PF" : "PJ");
-            stmtPerson.setLong(7, selectedFuncionarioId);
+            stmtPerson.setString(2, nomeField.getText());
+            stmtPerson.setString(3, cpfField.getText());
+            stmtPerson.setLong(4, selectedFuncionarioId);
             stmtPerson.executeUpdate();
 
             // Update address
@@ -238,6 +234,7 @@ public class FuncionarioEditarController {
             statusLabel.setText("Erro ao atualizar os dados do funcionário.");
         }
     }
+
 
 
     private void updatePhoneData(Connection conn) throws SQLException {
