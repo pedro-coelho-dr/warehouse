@@ -13,8 +13,8 @@ public class MainController {
 
     public void pesquisarPedido(ActionEvent event) { loadView("PedidoPesquisarView");}
 
-    public void adicionarProduto(ActionEvent event) {
-        loadView("ProdutoAdicionarView");
+    public void criarProduto(ActionEvent event) {
+        loadView("ProdutoCriarView");
     }
 
     public void pesquisarProduto(ActionEvent event) {
