@@ -1,4 +1,4 @@
-package com.warehouse.warehouse.entity;
+package com.warehouse.warehouse.scrap;
 
 public class Departamento {
     private int last_id = 0;

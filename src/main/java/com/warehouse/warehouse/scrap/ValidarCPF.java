@@ -1,4 +1,4 @@
-package com.warehouse.warehouse.util;
+package com.warehouse.warehouse.scrap;
 
 public class ValidarCPF {
     private ValidarCPF() {}

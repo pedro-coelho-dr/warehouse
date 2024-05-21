@@ -12,8 +12,11 @@
             </Menu>
             <Menu text="Produto">
                 <MenuItem text="Pesquisar" onAction="#pesquisarProduto"/>
-                <MenuItem text="Adicionar" onAction="#adicionarProduto"/>
-                <MenuItem text="Categoria" onAction="#categoriaProduto"/>
+                <MenuItem text="Criar" onAction="#adicionarProduto"/>
+                    <Menu text="Categoria">
+                        <MenuItem text="Pesquisar" onAction="#categoriaPesquisar"/>
+                        <MenuItem text="Criar" onAction="#categoriaCriar"/>
+                    </Menu>
             </Menu>
             <Menu text="Cliente">
                 <MenuItem text="Pesquisar" onAction="#pesquisarCliente"/>
@@ -21,10 +24,19 @@
             </Menu>
             <Menu text="Funcionário">
                 <MenuItem text="Pesquisar" onAction="#pesquisarFuncionario"/>
-                <MenuItem text="Adicionar" onAction="#adicionarFuncionario"/>
-                <MenuItem text="Departamento" onAction="#departamentoPesquisar"/>
-                <MenuItem text="Adicionar Departamento" onAction="#departamentoCriar"/>
-
+                <MenuItem text="Criar" onAction="#criarFuncionario"/>
+                    <Menu text="Departamento">
+                        <MenuItem text="Pesquisar" onAction="#departamentoPesquisar"/>
+                        <MenuItem text="Criar" onAction="#departamentoCriar"/>
+                    </Menu>
+            </Menu>
+            <Menu text="Fornecedor">
+                <MenuItem text="Pesquisar" onAction="#pesquisarFornecedor"/>
+                <MenuItem text="Criar" onAction="#criarFornecedor"/>
+                <Menu text="Fornecimento">
+                    <MenuItem text="Pesquisar" onAction="#fornecimentoPesquisar"/>
+                    <MenuItem text="Criar" onAction="#fornecimentoCriar"/>
+                </Menu>
             </Menu>
         </MenuBar>
     </top>

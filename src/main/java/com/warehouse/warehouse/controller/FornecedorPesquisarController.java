@@ -9,11 +9,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.*;
 
-public class ClientePesquisarController {
+public class FornecedorPesquisarController {
 
     @FXML private Label titleLabel;
     @FXML private TextField searchNameField, searchIdField, searchCpfField;
-    @FXML private ListView<String> clientList;
+    @FXML private ListView<String> fornecedorList;
 
     private MainController mainController;
 
@@ -23,14 +23,14 @@ public class ClientePesquisarController {
 
     @FXML
     private void initialize() {
-        titleLabel.setText("Pesquisar Cliente");
-        clientList.setItems(FXCollections.observableArrayList());
+        titleLabel.setText("Pesquisar Fornecedor");
+        fornecedorList.setItems(FXCollections.observableArrayList());
     }
 
     @FXML
     private void handleSearch() {
-        ObservableList<String> clients = FXCollections.observableArrayList();
-        StringBuilder sql = new StringBuilder("SELECT pessoa.id, pessoa.nome, pessoa.cpf, pessoa.razao_social, pessoa.cnpj, pessoa.tipo FROM pessoa JOIN cliente ON pessoa.id = cliente.fk_pessoa_id WHERE 1=1");
+        ObservableList<String> fornecedores = FXCollections.observableArrayList();
+        StringBuilder sql = new StringBuilder("SELECT pessoa.id, pessoa.nome, pessoa.cpf, pessoa.razao_social, pessoa.cnpj, pessoa.tipo FROM pessoa JOIN fornecedor ON pessoa.id = fornecedor.fk_pessoa_id WHERE 1=1");
 
         if (!searchNameField.getText().isEmpty()) {
             sql.append(" AND (LOWER(pessoa.nome) LIKE ? OR LOWER(pessoa.razao_social) LIKE ?)");
@@ -41,7 +41,6 @@ public class ClientePesquisarController {
         if (!searchCpfField.getText().isEmpty()) {
             sql.append(" AND (pessoa.cpf LIKE ? OR pessoa.cnpj LIKE ?)");
         }
-
         sql.append(" ORDER BY pessoa.id");
 
         try (Connection conn = DatabaseConnector.getConnection();
@@ -70,10 +69,10 @@ public class ClientePesquisarController {
                 } else {
                     displayText = String.format("ID: %d - Razão Social: %s - CNPJ: %s", rs.getInt("id"), rs.getString("razao_social"), rs.getString("cnpj"));
                 }
-                clients.add(displayText);
+                fornecedores.add(displayText);
             }
 
-            clientList.setItems(clients);
+            fornecedorList.setItems(fornecedores);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -81,11 +80,11 @@ public class ClientePesquisarController {
 
     @FXML
     private void handleEditSelected() {
-        String selectedClientInfo = clientList.getSelectionModel().getSelectedItem();
+        String selectedFornecedorInfo = fornecedorList.getSelectionModel().getSelectedItem();
 
-        if (selectedClientInfo != null && mainController != null) {
-            long clientId = Long.parseLong(selectedClientInfo.split(" - ")[0].split(": ")[1]);
-            mainController.loadViewCliente("ClienteEditarView", clientId);
+        if (selectedFornecedorInfo != null && mainController != null) {
+            long fornecedorId = Long.parseLong(selectedFornecedorInfo.split(" - ")[0].split(": ")[1]);
+            mainController.loadViewFornecedor("FornecedorEditarView", fornecedorId);
         }
     }
 }

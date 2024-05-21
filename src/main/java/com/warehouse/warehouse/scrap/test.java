@@ -1,11 +1,9 @@
-package com.warehouse.warehouse.test;
+package com.warehouse.warehouse.scrap;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.warehouse.warehouse.entity.Pessoa;
 
 public class test {
 

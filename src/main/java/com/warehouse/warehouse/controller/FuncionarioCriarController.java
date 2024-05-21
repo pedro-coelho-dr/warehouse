@@ -7,13 +7,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 
+import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-public class ClienteCriarController {
+public class FuncionarioCriarController {
 
-    // PF U PJ?
+    // PF or PJ?
     @FXML private RadioButton pfRadioButton;
     @FXML private RadioButton pjRadioButton;
     @FXML private ToggleGroup typeToggleGroup;
@@ -38,6 +40,15 @@ public class ClienteCriarController {
     @FXML private ComboBox<String> estadoComboBox;
     @FXML private TextField cepField;
 
+    // Funcionario-specific fields
+    @FXML private DatePicker dataContratacaoPicker;
+    @FXML private TextField salarioField;
+    @FXML private RadioButton ativoRadioButton;
+    @FXML private RadioButton inativoRadioButton;
+    @FXML private ToggleGroup statusToggleGroup;
+    @FXML private ComboBox<String> departamentoComboBox;
+    @FXML private ComboBox<String> gerenteComboBox;
+
     // Salvar
     @FXML private Label statusLabel;
 
@@ -56,7 +67,7 @@ public class ClienteCriarController {
 
         updateFieldAccess(pfRadioButton.getText());
 
-        // listener
+        // Listener for radio buttons
         typeToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 updateFieldAccess(((RadioButton) newValue).getText());
@@ -64,6 +75,16 @@ public class ClienteCriarController {
         });
 
         estadoComboBox.setItems(FXCollections.observableArrayList(estados));
+
+        // Status
+        statusToggleGroup = new ToggleGroup();
+        ativoRadioButton.setToggleGroup(statusToggleGroup);
+        inativoRadioButton.setToggleGroup(statusToggleGroup);
+        ativoRadioButton.setSelected(true); // Ativo default
+
+
+        populateDepartamentoComboBox();
+        populateGerenteComboBox();
     }
 
     private void updateFieldAccess(String type) {
@@ -100,12 +121,16 @@ public class ClienteCriarController {
     }
 
     @FXML
-    private void saveClient() {
-
+    private void saveFuncionario() {
         String email = emailField.getText().trim();
         RadioButton selectedRadioButton = (RadioButton) typeToggleGroup.getSelectedToggle();
         String tipo = selectedRadioButton.getText().equals("Pessoa Física") ? "PF" : "PJ";
 
+        LocalDate dataContratacao = dataContratacaoPicker.getValue();
+        String salario = salarioField.getText().trim();
+        String status = ativoRadioButton.isSelected() ? "Ativo" : "Inativo";
+        String departamento = departamentoComboBox.getValue();
+        String gerente = gerenteComboBox.getValue();
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -115,11 +140,10 @@ public class ClienteCriarController {
             conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false); // transaction
 
-            // INSERIR PESSOA
+            // Insert into pessoa table
             stmt = conn.prepareStatement(
                     "INSERT INTO pessoa (email, tipo, nome, cpf, razao_social, cnpj) VALUES (?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
-            // NULL para PF U PJ
             stmt.setString(1, email);
             stmt.setString(2, tipo);
             stmt.setString(3, tipo.equals("PF") ? nomeField.getText().trim() : null);
@@ -128,16 +152,21 @@ public class ClienteCriarController {
             stmt.setString(6, tipo.equals("PJ") ? cnpjField.getText().trim() : null);
             stmt.executeUpdate();
 
-
             generatedKeys = stmt.getGeneratedKeys();
             long pessoaId = 0;
             if (generatedKeys.next()) {
                 pessoaId = generatedKeys.getLong(1);
 
-                // Insert cliente
+                // Insert into funcionario table
                 stmt.close();
-                stmt = conn.prepareStatement("INSERT INTO cliente (fk_pessoa_id) VALUES (?)");
-                stmt.setLong(1, pessoaId);
+                stmt = conn.prepareStatement(
+                        "INSERT INTO funcionario (data_de_contratacao, salario, status, fk_pessoa_id, fk_departamento_id, gerente_fk_funcionario_id) VALUES (?, ?, ?, ?, ?, ?)");
+                stmt.setDate(1, Date.valueOf(dataContratacao));
+                stmt.setBigDecimal(2, new BigDecimal(salario));
+                stmt.setString(3, status);
+                stmt.setLong(4, pessoaId);
+                stmt.setObject(5, departamento.equals("Nenhum") ? null : getDepartamentoId(departamento));
+                stmt.setObject(6, gerente.equals("Nenhum") ? null : getFuncionarioId(gerente));
                 stmt.executeUpdate();
 
                 // Insert telefones
@@ -154,9 +183,10 @@ public class ClienteCriarController {
                     }
                 }
 
-                // Insert endereço
+                // Insert endereco
                 stmt.close();
-                stmt = conn.prepareStatement("INSERT INTO endereco (rua, numero, bairro, cidade, estado, cep, fk_pessoa_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                stmt = conn.prepareStatement(
+                        "INSERT INTO endereco (rua, numero, bairro, cidade, estado, cep, fk_pessoa_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 stmt.setString(1, ruaField.getText());
                 stmt.setInt(2, Integer.parseInt(numeroField.getText()));
                 stmt.setString(3, bairroField.getText());
@@ -165,19 +195,17 @@ public class ClienteCriarController {
                 stmt.setString(6, cepField.getText());
                 stmt.setLong(7, pessoaId);
                 stmt.executeUpdate();
-
             } else {
-                throw new SQLException("Falha na criação do Cliente: não obteve ID");
+                throw new SQLException("Falha na criação do Funcionário: não obteve ID.");
             }
 
             conn.commit();
-            statusLabel.setText("Cliente criado com sucesso.");
-
+            statusLabel.setText("Funcionário criado com sucesso.");
         } catch (SQLException ex) {
             try {
                 if (conn != null) conn.rollback();
             } catch (SQLException se2) {
-                ex.printStackTrace();
+                se2.printStackTrace();
             }
             ex.printStackTrace();
             statusLabel.setText("Erro ao conectar com o banco de dados.");
@@ -185,6 +213,74 @@ public class ClienteCriarController {
             if (generatedKeys != null) try { generatedKeys.close(); } catch (SQLException ex) { /* Ignored */ }
             if (stmt != null) try { stmt.close(); } catch (SQLException ex) { /* Ignored */ }
             if (conn != null) try { conn.close(); } catch (SQLException ex) { /* Ignored */ }
+        }
+    }
+
+    private void populateDepartamentoComboBox() {
+        departamentoComboBox.getItems().clear();
+        departamentoComboBox.getItems().add("Nenhum");
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT nome FROM departamento")) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                departamentoComboBox.getItems().add(rs.getString("nome"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void populateGerenteComboBox() {
+        gerenteComboBox.getItems().clear();
+        gerenteComboBox.getItems().add("Nenhum");
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT p.nome, p.razao_social FROM pessoa p " +
+                             "JOIN funcionario f ON p.id = f.fk_pessoa_id " +
+                             "WHERE f.status = 'Ativo'")) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String nome = rs.getString("nome");
+                String razaoSocial = rs.getString("razao_social");
+                if (nome != null && !nome.isEmpty()) {
+                    gerenteComboBox.getItems().add(nome);
+                } else if (razaoSocial != null && !razaoSocial.isEmpty()) {
+                    gerenteComboBox.getItems().add(razaoSocial);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getDepartamentoId(String nome) throws SQLException {
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT id FROM departamento WHERE nome = ?")) {
+            stmt.setString(1, nome);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            } else {
+                throw new SQLException("Departamento não encontrado: " + nome);
+            }
+        }
+    }
+
+    private int getFuncionarioId(String identifier) throws SQLException {
+        if (identifier == null || identifier.isEmpty()) {
+            return 0; // No gerente
+        }
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT p.id FROM funcionario f JOIN pessoa p ON f.fk_pessoa_id = p.id WHERE p.nome = ? OR p.razao_social = ?")) {
+            stmt.setString(1, identifier);
+            stmt.setString(2, identifier);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            } else {
+                throw new SQLException("Funcionário não encontrado: " + identifier);
+            }
         }
     }
 }

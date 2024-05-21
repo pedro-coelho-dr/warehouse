@@ -1,4 +1,4 @@
-package com.warehouse.warehouse.entity;
+package com.warehouse.warehouse.scrap;
 
 import java.time.LocalDateTime;
 

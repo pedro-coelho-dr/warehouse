@@ -1,4 +1,4 @@
-package com.warehouse.warehouse.entity;
+package com.warehouse.warehouse.scrap;
 
 public class Endereco {
     private int last_id = 0;
