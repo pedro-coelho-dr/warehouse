@@ -62,18 +62,6 @@
                <ComboBox fx:id="estadoComboBox" maxWidth="100" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                <Label text="CEP:" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                <TextField fx:id="cepField" maxWidth="180" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-               <columnConstraints>
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints />
-                  <RowConstraints />
-               </rowConstraints>
             </GridPane>
          </HBox>
          <Separator maxWidth="Infinity" />

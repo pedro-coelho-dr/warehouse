@@ -124,6 +124,7 @@ CREATE TABLE fornece (
 );
 
 
+
 CREATE TABLE telefone (
                           id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
                           telefone VARCHAR(20),
