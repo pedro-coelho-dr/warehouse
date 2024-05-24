@@ -79,6 +79,9 @@ public class MainController {
             } else if (controller instanceof FuncionarioPesquisarController) {
                 ((FuncionarioPesquisarController) controller).setMainController(this);
             }
+            else if (controller instanceof ProdutoPesquisarController) {
+                ((ProdutoPesquisarController) controller).setMainController(this);
+            }
             contentArea.getChildren().setAll(view);
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,5 +141,37 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    public void loadViewId(String fxmlFile, long tableId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
+            Node view = loader.load();
+
+            if (fxmlFile.equals("ClienteEditarView")) {
+                ClienteEditarController controller = loader.getController();
+                controller.setSelectedClientId(tableId);
+            }
+            else if (fxmlFile.equals("FornecedorEditarView")) {
+                FornecedorEditarController controller = loader.getController();
+                controller.setSelectedFornecedorId(tableId);
+            }
+            else if (fxmlFile.equals("FuncionarioEditarView")) {
+                FuncionarioEditarController controller = loader.getController();
+                controller.setSelectedFuncionarioId(tableId);
+            }
+            else if (fxmlFile.equals("DepartamentoEditarView")) {
+                DepartamentoEditarController controller = loader.getController();
+                controller.setSelectedDepartamentoId(tableId);
+            }
+            else if (fxmlFile.equals("ProdutoEditarView")) {
+                ProdutoEditarController controller = loader.getController();
+                controller.setSelectedProductId(tableId);
+            }
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 

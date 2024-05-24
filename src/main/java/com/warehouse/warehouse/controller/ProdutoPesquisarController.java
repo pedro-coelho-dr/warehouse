@@ -4,20 +4,24 @@ import com.warehouse.warehouse.database.DatabaseConnector;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProdutoPesquisarController {
 
     @FXML private Label titleLabel;
     @FXML private TextField searchNameField, searchIdField, searchCategoryField;
+    @FXML private ComboBox<String> categoriaComboBox;
     @FXML private ListView<String> productList;
+    @FXML private Label statusLabel;
+
+    private List<Integer> categoriaIds;
 
     private MainController mainController;
 
@@ -28,8 +32,31 @@ public class ProdutoPesquisarController {
     @FXML
     private void initialize() {
         titleLabel.setText("Pesquisar Produto");
+        carregarCategorias();
         productList.setItems(FXCollections.observableArrayList());
     }
+
+    private void carregarCategorias() {
+        categoriaIds = new ArrayList<>();
+        List<String> categorias = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnector.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT id, nome FROM categoria")) {
+
+            while (rs.next()) {
+                categoriaIds.add(rs.getInt("id"));
+                categorias.add(rs.getString("nome"));
+            }
+
+            categoriaComboBox.setItems(FXCollections.observableArrayList(categorias));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            statusLabel.setText("Erro ao carregar categorias.");
+        }
+    }
+
 
     @FXML
     private void handleSearch() {
@@ -42,8 +69,11 @@ public class ProdutoPesquisarController {
         if (!searchIdField.getText().isEmpty()) {
             sql.append(" AND CAST(produto.id AS CHAR) LIKE ?");
         }
-        if (!searchCategoryField.getText().isEmpty()) {
-            sql.append(" AND LOWER(categoria.nome) LIKE ?");
+//        if (!searchCategoryField.getText().isEmpty()) {
+//            sql.append(" AND LOWER(categoria.nome) LIKE ?");
+//        }
+        if (!categoriaComboBox.getSelectionModel().isEmpty()) {
+            sql.append(" AND LOWER(categoria.nome) = ?");
         }
 
         sql.append(" ORDER BY produto.id");
@@ -58,8 +88,11 @@ public class ProdutoPesquisarController {
             if (!searchIdField.getText().isEmpty()) {
                 stmt.setString(index++, "%" + searchIdField.getText() + "%");
             }
-            if (!searchCategoryField.getText().isEmpty()) {
-                stmt.setString(index, "%" + searchCategoryField.getText().toLowerCase() + "%");
+//            if (!searchCategoryField.getText().isEmpty()) {
+//                stmt.setString(index, "%" + searchCategoryField.getText().toLowerCase() + "%");
+//            }
+            if (!categoriaComboBox.getSelectionModel().isEmpty()) {
+                stmt.setString(index++, categoriaComboBox.getSelectionModel().getSelectedItem() );
             }
 
             ResultSet rs = stmt.executeQuery();
@@ -80,7 +113,7 @@ public class ProdutoPesquisarController {
 
         if (selectedProductInfo != null && mainController != null) {
             long productId = Long.parseLong(selectedProductInfo.split(" - ")[0].split(": ")[1]);
-//            mainController.loadViewProduto("ProdutoEditarView", productId);
+            mainController.loadViewId("ProdutoEditarView", productId);
         }
     }
 }

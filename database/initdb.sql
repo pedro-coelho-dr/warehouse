@@ -11,11 +11,11 @@ CREATE TABLE pessoa (
 
                         -- Pessoa Física
                         nome VARCHAR(100),
-                        cpf VARCHAR(11) UNIQUE,
+                        cpf VARCHAR(14) UNIQUE,
 
                         -- Pessoa Jurídica
                         razao_social VARCHAR(100),
-                        cnpj VARCHAR(14) UNIQUE,
+                        cnpj VARCHAR(18) UNIQUE,
 
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -143,7 +143,7 @@ CREATE TABLE endereco (
                           bairro VARCHAR(50),
                           cidade VARCHAR(50),
                           estado VARCHAR(2),
-                          cep VARCHAR(8),
+                          cep VARCHAR(9),
 
                           fk_pessoa_id INT,
                           FOREIGN KEY (fk_pessoa_id) REFERENCES pessoa (id) ON DELETE CASCADE ON UPDATE CASCADE,
