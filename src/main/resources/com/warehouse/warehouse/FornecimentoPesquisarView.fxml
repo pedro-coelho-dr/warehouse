@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoPesquisarController">
-    <Label fx:id="titleLabel" text="FORNECIMENTO PESQUISAR VIEW" style="-fx-font-size: 24px;" />
+    <Label fx:id="titleLabel" text="Pesquisar Fornecimento" style="-fx-font-size: 24px;" />
+    <ScrollPane fitToWidth="true" fitToHeight="true" minWidth="700" maxWidth="700" vbarPolicy="AS_NEEDED" hbarPolicy="AS_NEEDED">
+        <VBox alignment="TOP_LEFT" maxWidth="700">
+            <HBox spacing="20" maxWidth="780" alignment="CENTER_LEFT">
+                <VBox spacing="10" style="-fx-padding: 10;" minWidth="280" maxWidth="280">
+
+                    <Label prefHeight="20.0" prefWidth="200" text="Nome do Produto:" />
+                    <ComboBox fx:id="nomeProdutoComboBox" maxWidth="280"/>
+                    <Label prefHeight="20.0" prefWidth="200" text="Nome do Fornecedor:" />
+                    <ComboBox fx:id="nomeFornecedorComboBox" maxWidth="280"/>
+                    <Label prefHeight="20.0" prefWidth="200" text="ID do Fornecimento:" />
+                    <TextField fx:id="searchIdField" maxWidth="280"/>
+                    <Button text="Pesquisar" maxWidth="80" onAction="#handleSearch"/>
+                </VBox>
+                <VBox spacing="10" style="-fx-padding: 10;" minWidth="390" maxWidth="390">
+                    <ListView fx:id="fornecedorList" prefHeight="400" prefWidth="390"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </ScrollPane>
 </VBox>

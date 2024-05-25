@@ -6,8 +6,6 @@ import javafx.scene.control.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.List;
-
 
 public class FornecimentoCriarController {
 
@@ -22,28 +20,19 @@ public class FornecimentoCriarController {
     @FXML
     private Label statusLabel;
 
-
-
     @FXML
     private void initialize() {
-
         populateNomeProdutoComboBox();
         populateNomeFornecedorComboBox();
-
     }
-
-
 
     private void populateNomeProdutoComboBox() {
         nomeProdutoComboBox.getItems().clear();
         try (Connection conn = DatabaseConnector.getConnection()) {
-
             PreparedStatement stmt = conn.prepareStatement("SELECT p.nome FROM produto p");
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 String nome = rs.getString("nome");
-
                 if (nome != null && !nome.isEmpty()) {
                     nomeProdutoComboBox.getItems().add(nome);
                 }
@@ -53,24 +42,19 @@ public class FornecimentoCriarController {
         }
     }
 
-
     private void populateNomeFornecedorComboBox() {
-
         nomeFornecedorComboBox.getItems().clear();
         try (Connection conn = DatabaseConnector.getConnection()) {
-
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.nome, p.razao_social FROM pessoa p " +
-                    "JOIN fornecedor f ON p.id = f.fk_pessoa_id");
-
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT p.nome, p.razao_social FROM pessoa p " +
+                            "JOIN fornecedor f ON p.id = f.fk_pessoa_id");
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 String nome = rs.getString("nome");
                 String razao_social = rs.getString("razao_social");
-
                 if (nome != null && !nome.isEmpty()) {
                     nomeFornecedorComboBox.getItems().add(nome);
-                } else if (razao_social!= null && !razao_social.isEmpty()) {
+                } else if (razao_social != null && !razao_social.isEmpty()) {
                     nomeFornecedorComboBox.getItems().add(razao_social);
                 }
             }
@@ -95,49 +79,30 @@ public class FornecimentoCriarController {
             int fornecedorId = getFornecedorId(fornecedor);
             int produtoId = getProdutoId(produto);
 
-
             stmt = conn.prepareStatement(
-                    "SELECT COUNT(*) FROM fornece WHERE fk_fornecedor_id = ? AND fk_produto_id = ?");
-            stmt.setInt(1, fornecedorId);
-            stmt.setInt(2, produtoId);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            int count = rs.getInt(1);
-            stmt.close();
-
-            if (count > 0) {
-                stmt = conn.prepareStatement(
-                        "UPDATE fornece SET preco_compra = ?, quantidade = ? WHERE fk_fornecedor_id = ? AND fk_produto_id = ?");
-                stmt.setBigDecimal(1, new BigDecimal(precoCompra));
-                stmt.setInt(2, Integer.parseInt(quantidadeFornecida));
-                stmt.setInt(3, fornecedorId);
-                stmt.setInt(4, produtoId);
-            } else {
-                stmt = conn.prepareStatement(
-                        "INSERT INTO fornece (preco_compra, quantidade, fk_fornecedor_id, fk_produto_id) VALUES (?, ?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS);
-                stmt.setBigDecimal(1, new BigDecimal(precoCompra)); // Preço de compra deve ser BigDecimal
-                stmt.setInt(2, Integer.parseInt(quantidadeFornecida)); // Quantidade deve ser Integer
-                stmt.setInt(3, fornecedorId);
-                stmt.setInt(4, produtoId);
-            }
+                    "INSERT INTO fornece (preco_compra, quantidade, fk_fornecedor_id, fk_produto_id) VALUES (?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            stmt.setBigDecimal(1, new BigDecimal(precoCompra));
+            stmt.setInt(2, Integer.parseInt(quantidadeFornecida));
+            stmt.setInt(3, fornecedorId);
+            stmt.setInt(4, produtoId);
 
             int affectedRows = stmt.executeUpdate();
 
             if (affectedRows > 0) {
-                conn.commit(); // Confirma a transação
-                statusLabel.setText("Produto salvo com sucesso!");
+                conn.commit();
+                statusLabel.setText("Fornecimento salvo com sucesso!");
                 limparCampos();
             } else {
-                conn.rollback(); // Reverte a transação
-                statusLabel.setText("Erro ao salvar o produto.");
+                conn.rollback();
+                statusLabel.setText("Erro ao salvar o fornecimento.");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
             if (conn != null) {
                 try {
-                    conn.rollback(); // Reverte a transação em caso de erro
+                    conn.rollback();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -199,5 +164,4 @@ public class FornecimentoCriarController {
         precoVendaField.clear();
         quantidadeEstoqueField.clear();
     }
-
 }

@@ -110,18 +110,19 @@ CREATE TABLE aluguel (
 
 
 CREATE TABLE fornece (
-                         preco_compra DECIMAL(10,2),
-                         quantidade INT,
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        preco_compra DECIMAL(10,2),
+                        quantidade INT,
+                        fk_fornecedor_id INT,
+                        fk_produto_id INT,
 
-                         fk_fornecedor_id INT,
-                         fk_produto_id INT,
-                         PRIMARY KEY (fk_fornecedor_id, fk_produto_id),
-                         FOREIGN KEY (fk_fornecedor_id) REFERENCES fornecedor (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                         FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                        FOREIGN KEY (fk_fornecedor_id) REFERENCES fornecedor (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                        FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
 
-                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
 
 
 
@@ -151,3 +152,16 @@ CREATE TABLE endereco (
                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+DELIMITER $$
+
+CREATE TRIGGER atualizar_quantidade_produto
+AFTER INSERT ON fornece
+FOR EACH ROW
+BEGIN
+    UPDATE produto
+    SET quantidade_estoque = quantidade_estoque + NEW.quantidade
+    WHERE id = NEW.fk_produto_id;
+END$$
+
+DELIMITER ;
