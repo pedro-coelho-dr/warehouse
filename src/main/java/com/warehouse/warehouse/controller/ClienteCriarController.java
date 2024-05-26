@@ -1,6 +1,7 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,6 +11,7 @@ import javafx.scene.Node;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ClienteCriarController {
 
@@ -64,6 +66,12 @@ public class ClienteCriarController {
         });
 
         estadoComboBox.setItems(FXCollections.observableArrayList(estados));
+
+        addFieldValidators();
+
+        if (phoneContainer.getChildren().isEmpty()) {
+            addPhoneField();
+        }
     }
 
     private void updateFieldAccess(String type) {
@@ -82,12 +90,40 @@ public class ClienteCriarController {
             cpfField.clear();
         }
     }
+    private void addFieldValidators() {
+        // Max length
+        FieldValidation.setTextFieldLimit(emailField, 100);
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextFieldLimit(cpfField, 14);
+        FieldValidation.setTextFieldLimit(razaoSocialField, 100);
+        FieldValidation.setTextFieldLimit(cnpjField, 18);
+        FieldValidation.setTextFieldLimit(ruaField, 50);
+        FieldValidation.setTextFieldLimit(numeroField, 10);
+        FieldValidation.setTextFieldLimit(bairroField, 50);
+        FieldValidation.setTextFieldLimit(cidadeField, 50);
+        FieldValidation.setTextFieldLimit(cepField, 9);
+
+        // Numeric
+        FieldValidation.setNumericField(cpfField);
+        FieldValidation.setNumericField(cnpjField);
+        FieldValidation.setNumericField(numeroField);
+        FieldValidation.setNumericField(cepField);
+
+        for (Node node : phoneContainer.getChildren()) {
+            if (node instanceof TextField) {
+                FieldValidation.setTextFieldLimit((TextField) node, 20);
+                FieldValidation.setNumericField((TextField) node);
+            }
+        }
+    }
 
     @FXML
     private void addPhoneField() {
         TextField newPhoneField = new TextField();
         newPhoneField.setMaxWidth(300);
         newPhoneField.setPromptText("Telefone");
+        FieldValidation.setTextFieldLimit(newPhoneField, 20);
+        FieldValidation.setNumericField(newPhoneField);
         phoneContainer.getChildren().add(newPhoneField);
     }
 
@@ -101,6 +137,9 @@ public class ClienteCriarController {
 
     @FXML
     private void saveClient() {
+        if (!validateFields()) {
+            return;
+        }
 
         String email = emailField.getText().trim();
         RadioButton selectedRadioButton = (RadioButton) typeToggleGroup.getSelectedToggle();
@@ -120,7 +159,7 @@ public class ClienteCriarController {
                     "INSERT INTO pessoa (email, tipo, nome, cpf, razao_social, cnpj) VALUES (?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             // NULL para PF U PJ
-            stmt.setString(1, email);
+            stmt.setString(1, email.isEmpty() ? null : email);
             stmt.setString(2, tipo);
             stmt.setString(3, tipo.equals("PF") ? nomeField.getText().trim() : null);
             stmt.setString(4, tipo.equals("PF") ? cpfField.getText().trim() : null);
@@ -157,12 +196,12 @@ public class ClienteCriarController {
                 // Insert endereço
                 stmt.close();
                 stmt = conn.prepareStatement("INSERT INTO endereco (rua, numero, bairro, cidade, estado, cep, fk_pessoa_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                stmt.setString(1, ruaField.getText());
-                stmt.setInt(2, Integer.parseInt(numeroField.getText()));
-                stmt.setString(3, bairroField.getText());
-                stmt.setString(4, cidadeField.getText());
+                stmt.setString(1, ruaField.getText().isEmpty() ? null : ruaField.getText().trim());
+                stmt.setString(2, numeroField.getText().isEmpty() ? null : numeroField.getText().trim());
+                stmt.setString(3, bairroField.getText().isEmpty() ? null : bairroField.getText().trim());
+                stmt.setString(4, cidadeField.getText().isEmpty() ? null : cidadeField.getText().trim());
                 stmt.setString(5, estadoComboBox.getValue());
-                stmt.setString(6, cepField.getText());
+                stmt.setString(6, cepField.getText().isEmpty() ? null : cepField.getText().trim());
                 stmt.setLong(7, pessoaId);
                 stmt.executeUpdate();
 
@@ -186,5 +225,20 @@ public class ClienteCriarController {
             if (stmt != null) try { stmt.close(); } catch (SQLException ex) { /* Ignored */ }
             if (conn != null) try { conn.close(); } catch (SQLException ex) { /* Ignored */ }
         }
+    }
+
+    private boolean validateFields() {
+        String nome = nomeField.getText().trim();
+        String cpf = cpfField.getText().trim();
+        String razaoSocial = razaoSocialField.getText().trim();
+        String cnpj = cnpjField.getText().trim();
+
+        if ((pfRadioButton.isSelected() && (nome.isEmpty() || cpf.isEmpty())) ||
+                (pjRadioButton.isSelected() && (razaoSocial.isEmpty() || cnpj.isEmpty()))) {
+            statusLabel.setText("Por favor, preencha os campos obrigatórios.");
+            return false;
+        }
+
+        return true;
     }
 }

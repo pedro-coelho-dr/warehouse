@@ -141,12 +141,23 @@ public class FuncionarioEditarController {
 
     private void loadGerenteData() {
         try (Connection conn = DatabaseConnector.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT fk_pessoa_id, nome FROM funcionario JOIN pessoa ON funcionario.fk_pessoa_id = pessoa.id WHERE fk_departamento_id IS NOT NULL")) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT p.id AS fk_pessoa_id, p.tipo, p.nome, p.razao_social " +
+                             "FROM funcionario f " +
+                             "JOIN pessoa p ON f.fk_pessoa_id = p.id " +
+                             "WHERE f.fk_departamento_id IS NOT NULL")) {
 
             ResultSet rs = stmt.executeQuery();
             gerenteComboBox.getItems().add("Nenhum");
             while (rs.next()) {
-                gerenteComboBox.getItems().add(rs.getString("fk_pessoa_id") + " - " + rs.getString("nome"));
+                String gerenteDisplayName;
+                String tipo = rs.getString("tipo");
+                if ("PF".equals(tipo)) {
+                    gerenteDisplayName = rs.getString("fk_pessoa_id") + " - " + rs.getString("nome");
+                } else {
+                    gerenteDisplayName = rs.getString("fk_pessoa_id") + " - " + rs.getString("razao_social");
+                }
+                gerenteComboBox.getItems().add(gerenteDisplayName);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
