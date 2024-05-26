@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoPesquisarController">
-    <Label fx:id="titleLabel" text="Pesquisar Fornecimento" style="-fx-font-size: 24px;" />
-    <ScrollPane fitToWidth="true" fitToHeight="true" minWidth="700" maxWidth="700" vbarPolicy="AS_NEEDED" hbarPolicy="AS_NEEDED">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoPesquisarController" stylesheets="/com/warehouse/warehouse/css/style.css">
+    <Label fx:id="titleLabel" style="-fx-font-size: 24px;" text="Pesquisar Fornecimento" />
+    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" maxWidth="700" minWidth="700" vbarPolicy="AS_NEEDED">
         <VBox alignment="TOP_LEFT" maxWidth="700">
-            <HBox spacing="20" maxWidth="780" alignment="CENTER_LEFT">
-                <VBox spacing="10" style="-fx-padding: 10;" minWidth="280" maxWidth="280">
+            <HBox alignment="CENTER_LEFT" maxWidth="780" spacing="20">
+                <VBox maxWidth="280" minWidth="280" spacing="10" style="-fx-padding: 10;">
 
                     <Label prefHeight="20.0" prefWidth="200" text="Nome do Produto:" />
-                    <ComboBox fx:id="nomeProdutoComboBox" maxWidth="280"/>
+                    <ComboBox fx:id="nomeProdutoComboBox" maxWidth="280" styleClass="combo-box" />
                     <Label prefHeight="20.0" prefWidth="200" text="Nome do Fornecedor:" />
-                    <ComboBox fx:id="nomeFornecedorComboBox" maxWidth="280"/>
-                    <Label prefHeight="20.0" prefWidth="200" text="ID do Fornecimento:" />
-                    <TextField fx:id="searchIdField" maxWidth="280"/>
-                    <Button text="Pesquisar" maxWidth="80" onAction="#handleSearch"/>
+                    <ComboBox fx:id="nomeFornecedorComboBox" maxWidth="280" styleClass="combo-box" />
+                    <Label opacity="0.0" prefHeight="0.0" prefWidth="200" text="ID do Fornecimento:" />
+                    <TextField fx:id="searchIdField" maxWidth="280" promptText="ID do fornecimento " />
+                    <Button maxWidth="80" onAction="#handleSearch" text="Pesquisar" />
                 </VBox>
-                <VBox spacing="10" style="-fx-padding: 10;" minWidth="390" maxWidth="390">
-                    <ListView fx:id="fornecedorList" prefHeight="400" prefWidth="390"/>
+                <VBox maxWidth="390" minWidth="390" spacing="10" style="-fx-padding: 10;">
+                    <ListView fx:id="fornecedorList" prefHeight="400" prefWidth="390" />
                 </VBox>
             </HBox>
         </VBox>

@@ -1,6 +1,7 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -22,8 +23,13 @@ public class FornecimentoCriarController {
 
     @FXML
     private void initialize() {
+
         populateNomeProdutoComboBox();
+
         populateNomeFornecedorComboBox();
+
+        addFieldValidators();
+
     }
 
     private void populateNomeProdutoComboBox() {
@@ -65,6 +71,10 @@ public class FornecimentoCriarController {
 
     @FXML
     private void saveFornecimento() {
+
+        if(!validateFields()){
+            return;
+        }
         String fornecedor = nomeFornecedorComboBox.getValue();
         String produto = nomeProdutoComboBox.getValue();
         String precoCompra = precoVendaField.getText();
@@ -157,6 +167,49 @@ public class FornecimentoCriarController {
             }
         }
     }
+
+
+    private void addFieldValidators(){
+
+        //Max length
+        FieldValidation.setTextFieldLimit(quantidadeEstoqueField, 5);
+
+        FieldValidation.setNumericField(quantidadeEstoqueField);
+
+        FieldValidation.setDecimalField(precoVendaField, 10, 2);
+
+
+    }
+
+    private boolean validateFields() {
+        String precoVenda = precoVendaField.getText() != null ? precoVendaField.getText().trim() : "";
+        String quantidadeEstoque = quantidadeEstoqueField.getText() != null ? quantidadeEstoqueField.getText().trim() : "";
+        String nomeProduto = nomeProdutoComboBox.getValue() != null ? nomeProdutoComboBox.getValue().trim() : "";
+        String nomeFornecedor = nomeFornecedorComboBox.getValue() != null ? nomeFornecedorComboBox.getValue().trim() : "";
+
+        // Verificação de campos obrigatórios
+        if (nomeProduto.isEmpty() || nomeFornecedor.isEmpty() || precoVenda.isEmpty() || quantidadeEstoque.isEmpty()) {
+            statusLabel.setText("Por favor, preencha todos os campos obrigatórios.");
+            return false;
+        }
+
+        // Validação de formato do preço de venda
+        if (!precoVenda.matches("\\d+(\\.\\d{1,2})?")) {
+            statusLabel.setText("Por favor, insira um valor de preço de venda válido.");
+            return false;
+        }
+
+        // Validação de formato da quantidade em estoque
+        if (!quantidadeEstoque.matches("\\d+")) {
+            statusLabel.setText("Por favor, insira um valor de quantidade em estoque válido.");
+            return false;
+        }
+
+        // Se todas as validações passarem, retorna true
+        return true;
+    }
+
+
 
     private void limparCampos() {
         nomeProdutoComboBox.getSelectionModel().clearSelection();

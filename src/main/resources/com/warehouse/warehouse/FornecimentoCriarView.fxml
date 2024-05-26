@@ -15,28 +15,28 @@
    <Separator maxWidth="Infinity" />
     <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" maxWidth="700" minWidth="700" vbarPolicy="AS_NEEDED">
         <VBox alignment="TOP_LEFT" maxWidth="700">
-         <HBox prefHeight="100.0" prefWidth="200.0">
+         <HBox prefHeight="112.0" prefWidth="698.0">
             <children>
                <HBox prefHeight="100.0" prefWidth="350.0">
                   <children>
                      <VBox prefHeight="100.0" prefWidth="214.0">
                         <children>
-                           <Label prefHeight="18.0" prefWidth="246.0" text="Nome do Produto:" />
-                           <ComboBox fx:id="nomeProdutoComboBox" maxWidth="280" prefHeight="26.0" prefWidth="269.0" />
-                           <Label prefHeight="18.0" prefWidth="160.0" text="Nome do Forncedor:" />
-                           <ComboBox fx:id="nomeFornecedorComboBox" maxWidth="280" prefHeight="26.0" prefWidth="269.0" />
+                           <Separator maxWidth="Infinity" opacity="0.0" prefHeight="7.0" prefWidth="700.0" />
+                           <ComboBox fx:id="nomeProdutoComboBox" maxWidth="280" prefHeight="26.0" prefWidth="214.0" promptText="Selecione o produto" />
+                           <Label prefHeight="18.0" prefWidth="160.0" />
+                           <ComboBox fx:id="nomeFornecedorComboBox" maxWidth="280" prefHeight="26.0" prefWidth="214.0" promptText="Selecione o Fornecedor" />
                         </children>
                      </VBox>
                   </children>
                </HBox>
                <HBox prefHeight="100.0" prefWidth="307.0">
                   <children>
-                     <VBox prefHeight="100.0" prefWidth="298.0">
+                     <VBox prefHeight="100.0" prefWidth="266.0">
                         <children>
-                                <Label prefHeight="18.0" prefWidth="164.0" text="Preço do fornecimento" />
-                                <TextField fx:id="precoVendaField" maxWidth="280" prefHeight="26.0" prefWidth="166.0" />
-                           <Label text="Quantidade fornecida" />
-                           <TextField fx:id="quantidadeEstoqueField" maxWidth="280" />
+                                <Label prefHeight="18.0" prefWidth="164.0" text="Preço do fornecimento:" />
+                                <TextField fx:id="precoVendaField" maxWidth="280" prefHeight="26.0" prefWidth="266.0" />
+                           <Label prefHeight="18.0" prefWidth="150.0" text="Quantidade fornecida:" />
+                           <TextField fx:id="quantidadeEstoqueField" maxWidth="280" prefHeight="16.0" prefWidth="266.0" />
                         </children>
                      </VBox>
                   </children>
@@ -46,7 +46,7 @@
         </VBox>
     </ScrollPane>
    <Separator maxWidth="Infinity" prefHeight="7.0" prefWidth="700.0" />
-   <Separator maxWidth="Infinity" opacity="0.0" prefHeight="77.0" prefWidth="700.0" />
+   <Separator maxWidth="Infinity" opacity="0.0" prefHeight="50.0" prefWidth="700.0" />
     <Label fx:id="statusLabel" />
     <Button alignment="CENTER" maxWidth="100" onAction="#saveFornecimento" styleClass="save-button" text="Salvar" />
 </VBox>

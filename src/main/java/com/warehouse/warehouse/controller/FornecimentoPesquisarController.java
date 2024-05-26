@@ -5,25 +5,31 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ArrayList;
-
+import java.util.List;
 
 public class FornecimentoPesquisarController {
 
-    @FXML private Label titleLabel;
-    @FXML private ComboBox<String> nomeProdutoComboBox;
-    @FXML private ComboBox<String> nomeFornecedorComboBox;
-    @FXML private TextField searchIdField;
-    @FXML private ListView<String> fornecedorList;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private ComboBox<String> nomeProdutoComboBox;
+    @FXML
+    private ComboBox<String> nomeFornecedorComboBox;
+    @FXML
+    private TextField searchIdField;
+    @FXML
+    private ListView<String> fornecedorList;
+    @FXML
+    private Label statusLabel; // Adicione esta linha para o statusLabel
 
     @FXML
     private void initialize() {
@@ -74,9 +80,29 @@ public class FornecimentoPesquisarController {
         }
     }
 
-
     @FXML
     private void handleSearch() {
+        String searchId = searchIdField.getText().trim();
+
+        if (!searchId.isEmpty()) {
+            try {
+                int id = Integer.parseInt(searchId);
+                if (id < 0) {
+                    statusLabel.setText("ID inválido. Insira um ID positivo.");
+                    return;
+                }
+
+                if (!doesIdExist(id)) {
+                    statusLabel.setText("ID não encontrado.");
+                    return;
+                }
+
+            } catch (NumberFormatException e) {
+                statusLabel.setText("ID inválido. Insira um número válido.");
+                return;
+            }
+        }
+
         ObservableList<String> fornecimentos = FXCollections.observableArrayList();
         StringBuilder sql = new StringBuilder("SELECT f.id, p.nome AS produto_nome, " +
                 "COALESCE(ps.nome, ps.razao_social) AS fornecedor_nome, f.preco_compra, f.quantidade " +
@@ -97,9 +123,9 @@ public class FornecimentoPesquisarController {
             parameters.add("%" + nomeFornecedorComboBox.getValue().toLowerCase() + "%");
             parameters.add("%" + nomeFornecedorComboBox.getValue().toLowerCase() + "%");
         }
-        if (!searchIdField.getText().isEmpty()) {
-            sql.append(" AND f.id LIKE ?");
-            parameters.add("%" + searchIdField.getText() + "%");
+        if (!searchId.isEmpty()) {
+            sql.append(" AND f.id = ?");
+            parameters.add(Integer.parseInt(searchId));
         }
         sql.append(" ORDER BY f.id");
 
@@ -118,10 +144,30 @@ public class FornecimentoPesquisarController {
                 fornecimentos.add(displayText);
             }
 
-            fornecedorList.setItems(fornecimentos);
+            if (fornecimentos.isEmpty()) {
+                statusLabel.setText("Nenhum fornecimento registrado.");
+            } else {
+                fornecedorList.setItems(fornecimentos);
+                statusLabel.setText(""); // Limpa a mensagem de status em caso de sucesso
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
+    private boolean doesIdExist(int id) {
+        String sql = "SELECT COUNT(*) FROM fornece WHERE id = ?";
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
