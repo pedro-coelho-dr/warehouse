@@ -1,16 +1,13 @@
 .root {
-    /* Applies to the background of the scene */
     -fx-background-color: #f0f0f0;
 }
 
 .label {
-    /* Styling for all labels */
     -fx-text-fill: #333;
     -fx-font-size: 14px;
 }
 
 .button {
-    /* Styling for all buttons */
     -fx-background-color: #ff8a65;
     -fx-text-fill: white;
     -fx-border-color: #d84315;
@@ -18,12 +15,10 @@
 }
 
 .button:hover {
-    /* Hover effect for buttons */
     -fx-background-color: #d84315;
 }
 
 .text-field {
-    /* Styling for all text fields */
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
     -fx-highlight-fill: #ffccbc;
     -fx-highlight-text-fill: black;
@@ -33,22 +28,19 @@
 }
 
 .menu-bar {
-    /* Styling for the menu bar */
     -fx-background-color: #d26f51;
     -fx-text-fill: #ffffff;
-    -fx-font-size: 14px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
 
 .menu-item {
-    /* Styling for menu items */
     -fx-text-fill: #ffffff;
-    -fx-font-size: 14px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
 
 .menu-item:focused {
-    /* Styling when a menu item is focused */
     -fx-background-color: #ff8a65;
     -fx-text-fill: white;
 }

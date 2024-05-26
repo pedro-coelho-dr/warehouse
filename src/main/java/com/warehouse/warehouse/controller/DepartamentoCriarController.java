@@ -1,6 +1,7 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -23,12 +24,18 @@ public class DepartamentoCriarController {
     private Label statusLabel;
 
     @FXML
+    private void initialize() {
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextAreaLimit(descricaoField, 500);
+    }
+
+    @FXML
     private void saveDepartamento(ActionEvent event) {
         String nome = nomeField.getText().trim();
-        String descricao = descricaoField.getText().trim();
+        String descricao = descricaoField.getText() != null ? descricaoField.getText().trim() : "";
 
-        if (nome.isEmpty() || descricao.isEmpty()) {
-            statusLabel.setText("Por favor, preencha todos os campos.");
+        if (nome.isEmpty()) {
+            statusLabel.setText("Por favor, preencha o campo nome.");
             return;
         }
 
@@ -41,7 +48,7 @@ public class DepartamentoCriarController {
 
             stmt = conn.prepareStatement("INSERT INTO departamento (nome, descricao) VALUES (?, ?)");
             stmt.setString(1, nome);
-            stmt.setString(2, descricao);
+            stmt.setString(2, descricao.isEmpty() ? null : descricao);
             stmt.executeUpdate();
 
             conn.commit();

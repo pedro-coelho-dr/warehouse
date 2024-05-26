@@ -1,6 +1,7 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -22,10 +23,8 @@ public class FuncionarioCriarController {
 
     // Pessoa
     @FXML private TextField emailField;
-
     @FXML private TextField nomeField;
     @FXML private TextField cpfField;
-
     @FXML private TextField razaoSocialField;
     @FXML private TextField cnpjField;
 
@@ -40,7 +39,7 @@ public class FuncionarioCriarController {
     @FXML private ComboBox<String> estadoComboBox;
     @FXML private TextField cepField;
 
-    // Funcionario-specific fields
+    // Funcionario
     @FXML private DatePicker dataContratacaoPicker;
     @FXML private TextField salarioField;
     @FXML private RadioButton ativoRadioButton;
@@ -67,7 +66,7 @@ public class FuncionarioCriarController {
 
         updateFieldAccess(pfRadioButton.getText());
 
-        // Listener for radio buttons
+        // Listener
         typeToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 updateFieldAccess(((RadioButton) newValue).getText());
@@ -82,9 +81,14 @@ public class FuncionarioCriarController {
         inativoRadioButton.setToggleGroup(statusToggleGroup);
         ativoRadioButton.setSelected(true); // Ativo default
 
-
         populateDepartamentoComboBox();
         populateGerenteComboBox();
+
+        addFieldValidators();
+
+        if (phoneContainer.getChildren().isEmpty()) {
+            addPhoneField();
+        }
     }
 
     private void updateFieldAccess(String type) {
@@ -104,11 +108,43 @@ public class FuncionarioCriarController {
         }
     }
 
+    private void addFieldValidators() {
+        // Max length
+        FieldValidation.setTextFieldLimit(emailField, 100);
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextFieldLimit(cpfField, 14);
+        FieldValidation.setTextFieldLimit(razaoSocialField, 100);
+        FieldValidation.setTextFieldLimit(cnpjField, 18);
+        FieldValidation.setTextFieldLimit(ruaField, 50);
+        FieldValidation.setTextFieldLimit(numeroField, 10);
+        FieldValidation.setTextFieldLimit(bairroField, 50);
+        FieldValidation.setTextFieldLimit(cidadeField, 50);
+        FieldValidation.setTextFieldLimit(cepField, 9);
+
+        // Numeric
+        FieldValidation.setNumericField(cpfField);
+        FieldValidation.setNumericField(cnpjField);
+        FieldValidation.setNumericField(numeroField);
+        FieldValidation.setNumericField(cepField);
+
+        // Decimal salario
+        FieldValidation.setDecimalField(salarioField, 10, 2);
+
+        for (Node node : phoneContainer.getChildren()) {
+            if (node instanceof TextField) {
+                FieldValidation.setTextFieldLimit((TextField) node, 20);
+                FieldValidation.setNumericField((TextField) node);
+            }
+        }
+    }
+
     @FXML
     private void addPhoneField() {
         TextField newPhoneField = new TextField();
         newPhoneField.setMaxWidth(300);
         newPhoneField.setPromptText("Telefone");
+        FieldValidation.setTextFieldLimit(newPhoneField, 20);
+        FieldValidation.setNumericField(newPhoneField);
         phoneContainer.getChildren().add(newPhoneField);
     }
 
@@ -122,6 +158,10 @@ public class FuncionarioCriarController {
 
     @FXML
     private void saveFuncionario() {
+        if (!validateFields()) {
+            return;
+        }
+
         String email = emailField.getText().trim();
         RadioButton selectedRadioButton = (RadioButton) typeToggleGroup.getSelectedToggle();
         String tipo = selectedRadioButton.getText().equals("Pessoa Física") ? "PF" : "PJ";
@@ -144,7 +184,7 @@ public class FuncionarioCriarController {
             stmt = conn.prepareStatement(
                     "INSERT INTO pessoa (email, tipo, nome, cpf, razao_social, cnpj) VALUES (?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, email);
+            stmt.setString(1, email.isEmpty() ? null : email);
             stmt.setString(2, tipo);
             stmt.setString(3, tipo.equals("PF") ? nomeField.getText().trim() : null);
             stmt.setString(4, tipo.equals("PF") ? cpfField.getText().trim() : null);
@@ -161,12 +201,12 @@ public class FuncionarioCriarController {
                 stmt.close();
                 stmt = conn.prepareStatement(
                         "INSERT INTO funcionario (data_de_contratacao, salario, status, fk_pessoa_id, fk_departamento_id, gerente_fk_funcionario_id) VALUES (?, ?, ?, ?, ?, ?)");
-                stmt.setDate(1, Date.valueOf(dataContratacao));
-                stmt.setBigDecimal(2, new BigDecimal(salario));
+                stmt.setDate(1, dataContratacao != null ? Date.valueOf(dataContratacao) : null);
+                stmt.setBigDecimal(2, salario.isEmpty() ? null : new BigDecimal(salario));
                 stmt.setString(3, status);
                 stmt.setLong(4, pessoaId);
-                stmt.setObject(5, departamento.equals("Nenhum") ? null : getDepartamentoId(departamento));
-                stmt.setObject(6, gerente.equals("Nenhum") ? null : getFuncionarioId(gerente));
+                stmt.setObject(5, departamento == null || departamento.equals("Nenhum") ? null : getDepartamentoId(departamento));
+                stmt.setObject(6, gerente == null || gerente.equals("Nenhum") ? null : getFuncionarioId(gerente));
                 stmt.executeUpdate();
 
                 // Insert telefones
@@ -187,12 +227,12 @@ public class FuncionarioCriarController {
                 stmt.close();
                 stmt = conn.prepareStatement(
                         "INSERT INTO endereco (rua, numero, bairro, cidade, estado, cep, fk_pessoa_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                stmt.setString(1, ruaField.getText());
-                stmt.setInt(2, Integer.parseInt(numeroField.getText()));
-                stmt.setString(3, bairroField.getText());
-                stmt.setString(4, cidadeField.getText());
+                stmt.setString(1, ruaField.getText().isEmpty() ? null : ruaField.getText().trim());
+                stmt.setString(2, numeroField.getText().isEmpty() ? null : numeroField.getText().trim());
+                stmt.setString(3, bairroField.getText().isEmpty() ? null : bairroField.getText().trim());
+                stmt.setString(4, cidadeField.getText().isEmpty() ? null : cidadeField.getText().trim());
                 stmt.setString(5, estadoComboBox.getValue());
-                stmt.setString(6, cepField.getText());
+                stmt.setString(6, cepField.getText().isEmpty() ? null : cepField.getText().trim());
                 stmt.setLong(7, pessoaId);
                 stmt.executeUpdate();
             } else {
@@ -283,4 +323,43 @@ public class FuncionarioCriarController {
             }
         }
     }
+
+    private boolean validateFields() {
+        String email = emailField.getText() != null ? emailField.getText().trim() : "";
+        String nome = nomeField.getText() != null ? nomeField.getText().trim() : "";
+        String cpf = cpfField.getText() != null ? cpfField.getText().trim() : "";
+        String razaoSocial = razaoSocialField.getText() != null ? razaoSocialField.getText().trim() : "";
+        String cnpj = cnpjField.getText() != null ? cnpjField.getText().trim() : "";
+        String salario = salarioField.getText().trim();
+
+        if ((pfRadioButton.isSelected() && (nome.isEmpty() || cpf.isEmpty())) ||
+                (pjRadioButton.isSelected() && (razaoSocial.isEmpty() || cnpj.isEmpty()))) {
+            statusLabel.setText("Por favor, preencha os campos obrigatórios.");
+            return false;
+        }
+
+        if (!email.isEmpty() && !FieldValidation.isUniqueField("email", email, 0)) {
+            statusLabel.setText("Email já está em uso.");
+            return false;
+        }
+
+        if (pfRadioButton.isSelected() && !cpf.isEmpty() && !FieldValidation.isUniqueField("cpf", cpf, 0)) {
+            statusLabel.setText("CPF já está em uso.");
+            return false;
+        }
+
+        if (pjRadioButton.isSelected() && !cnpj.isEmpty() && !FieldValidation.isUniqueField("cnpj", cnpj, 0)) {
+            statusLabel.setText("CNPJ já está em uso.");
+            return false;
+        }
+
+        if (!salario.isEmpty() && !salario.matches("\\d+(\\.\\d{1,2})?")) {
+            statusLabel.setText("Por favor, insira um valor de salário válido.");
+            return false;
+        }
+
+        return true;
+    }
+
+
 }

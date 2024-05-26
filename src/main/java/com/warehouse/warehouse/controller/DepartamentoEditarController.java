@@ -1,6 +1,7 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -23,6 +24,12 @@ public class DepartamentoEditarController {
     private Label statusLabel;
 
     private long selectedDepartamentoId;
+
+    @FXML
+    private void initialize() {
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextAreaLimit(descricaoField, 500);
+    }
 
     public void setSelectedDepartamentoId(long departamentoId) {
         this.selectedDepartamentoId = departamentoId;
@@ -49,14 +56,21 @@ public class DepartamentoEditarController {
 
     @FXML
     private void updateDepartamento() {
+        String nome = nomeField.getText().trim();
+        String descricao = descricaoField.getText() != null ? descricaoField.getText().trim() : "";
+
+        if (nome.isEmpty()) {
+            statusLabel.setText("Por favor, preencha o campo nome.");
+            return;
+        }
+
         String sqlUpdate = "UPDATE departamento SET nome=?, descricao=? WHERE id=?";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sqlUpdate)) {
 
-            stmt.setString(1, nomeField.getText().trim());
-            stmt.setString(2, descricaoField.getText().trim());
+            stmt.setString(1, nome);
+            stmt.setString(2, descricao.isEmpty() ? null : descricao);
             stmt.setLong(3, selectedDepartamentoId);
-
             stmt.executeUpdate();
 
             statusLabel.setText("Departamento atualizado com sucesso.");

@@ -11,14 +11,14 @@
             <HBox spacing="20" maxWidth="780" alignment="CENTER_LEFT">
                 <VBox spacing="10" style="-fx-padding: 10;" minWidth="290" maxWidth="390">
                     <RadioButton fx:id="pfRadioButton" text="Pessoa Física" toggleGroup="$typeToggleGroup" selected="true"/>
-                    <Label text="Nome:" />
+                    <Label text="Nome*:" />
                     <TextField fx:id="nomeField" maxWidth="280" />
-                    <Label text="CPF:" />
+                    <Label text="CPF*:" />
                     <TextField fx:id="cpfField" maxWidth="280" />
                     <RadioButton fx:id="pjRadioButton" text="Pessoa Jurídica" toggleGroup="$typeToggleGroup"/>
-                    <Label text="Razão Social:" />
+                    <Label text="Razão Social*:" />
                     <TextField fx:id="razaoSocialField" maxWidth="280" />
-                    <Label text="CNPJ:" />
+                    <Label text="CNPJ*:" />
                     <TextField fx:id="cnpjField" maxWidth="280" />
                 </VBox>
                 <VBox spacing="10" style="-fx-padding: 10;" minWidth="290" maxWidth="390">

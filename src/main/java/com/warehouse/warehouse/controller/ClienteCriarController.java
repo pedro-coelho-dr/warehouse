@@ -228,10 +228,11 @@ public class ClienteCriarController {
     }
 
     private boolean validateFields() {
-        String nome = nomeField.getText().trim();
-        String cpf = cpfField.getText().trim();
-        String razaoSocial = razaoSocialField.getText().trim();
-        String cnpj = cnpjField.getText().trim();
+        String email = emailField.getText() != null ? emailField.getText().trim() : "";
+        String nome = nomeField.getText() != null ? nomeField.getText().trim() : "";
+        String cpf = cpfField.getText() != null ? cpfField.getText().trim() : "";
+        String razaoSocial = razaoSocialField.getText() != null ? razaoSocialField.getText().trim() : "";
+        String cnpj = cnpjField.getText() != null ? cnpjField.getText().trim() : "";
 
         if ((pfRadioButton.isSelected() && (nome.isEmpty() || cpf.isEmpty())) ||
                 (pjRadioButton.isSelected() && (razaoSocial.isEmpty() || cnpj.isEmpty()))) {
@@ -239,6 +240,23 @@ public class ClienteCriarController {
             return false;
         }
 
+        if (!email.isEmpty() && !FieldValidation.isUniqueField("email", email, 0)) {
+            statusLabel.setText("Email já está em uso.");
+            return false;
+        }
+
+        if (pfRadioButton.isSelected() && !cpf.isEmpty() && !FieldValidation.isUniqueField("cpf", cpf, 0)) {
+            statusLabel.setText("CPF já está em uso.");
+            return false;
+        }
+
+        if (pjRadioButton.isSelected() && !cnpj.isEmpty() && !FieldValidation.isUniqueField("cnpj", cnpj, 0)) {
+            statusLabel.setText("CNPJ já está em uso.");
+            return false;
+        }
+
         return true;
     }
+
+
 }

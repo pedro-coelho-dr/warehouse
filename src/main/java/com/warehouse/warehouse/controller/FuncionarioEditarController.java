@@ -1,6 +1,8 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -8,6 +10,7 @@ import javafx.scene.Node;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,6 +52,8 @@ public class FuncionarioEditarController {
 
         loadDepartamentoData();
         loadGerenteData();
+
+        addFieldValidators();
     }
 
     private void updateFieldAccess(String type) {
@@ -57,6 +62,36 @@ public class FuncionarioEditarController {
         cpfField.setDisable(!isPF);
         razaoSocialField.setDisable(isPF);
         cnpjField.setDisable(isPF);
+    }
+
+    private void addFieldValidators() {
+        // Max length
+        FieldValidation.setTextFieldLimit(emailField, 100);
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextFieldLimit(cpfField, 14);
+        FieldValidation.setTextFieldLimit(razaoSocialField, 100);
+        FieldValidation.setTextFieldLimit(cnpjField, 18);
+        FieldValidation.setTextFieldLimit(ruaField, 50);
+        FieldValidation.setTextFieldLimit(numeroField, 10);
+        FieldValidation.setTextFieldLimit(bairroField, 50);
+        FieldValidation.setTextFieldLimit(cidadeField, 50);
+        FieldValidation.setTextFieldLimit(cepField, 9);
+
+        // Numeric
+        FieldValidation.setNumericField(cpfField);
+        FieldValidation.setNumericField(cnpjField);
+        FieldValidation.setNumericField(numeroField);
+        FieldValidation.setNumericField(cepField);
+
+        // Decimal salario
+        FieldValidation.setDecimalField(salarioField, 10, 2);
+
+        for (Node node : phoneContainer.getChildren()) {
+            if (node instanceof TextField) {
+                FieldValidation.setTextFieldLimit((TextField) node, 20);
+                FieldValidation.setNumericField((TextField) node);
+            }
+        }
     }
 
     private void loadFuncionarioData() {
@@ -113,7 +148,10 @@ public class FuncionarioEditarController {
     }
 
     private void loadFuncionarioSpecificData(ResultSet rs) throws SQLException {
-        dataContratacaoPicker.setValue(rs.getDate("data_de_contratacao").toLocalDate());
+        Date dateContratacao = rs.getDate("data_de_contratacao");
+        if (dateContratacao != null) {
+            dataContratacaoPicker.setValue(dateContratacao.toLocalDate());
+        }
         salarioField.setText(rs.getString("salario"));
         if ("Ativo".equals(rs.getString("status"))) {
             ativoRadioButton.setSelected(true);
@@ -123,6 +161,7 @@ public class FuncionarioEditarController {
         departamentoComboBox.setValue(rs.getString("fk_departamento_id"));
         gerenteComboBox.setValue(rs.getString("gerente_fk_funcionario_id"));
     }
+
     private void loadDepartamentoData() {
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT id, nome FROM departamento")) {
@@ -137,7 +176,6 @@ public class FuncionarioEditarController {
             statusLabel.setText("Erro ao carregar os departamentos.");
         }
     }
-
 
     private void loadGerenteData() {
         try (Connection conn = DatabaseConnector.getConnection();
@@ -164,6 +202,7 @@ public class FuncionarioEditarController {
             statusLabel.setText("Erro ao carregar os gerentes.");
         }
     }
+
     @FXML
     private void addPhoneField() {
         addPhoneFieldWithData("");
@@ -174,6 +213,8 @@ public class FuncionarioEditarController {
         TextField newPhoneField = new TextField(phoneNumber);
         newPhoneField.setMaxWidth(300);
         newPhoneField.setPromptText("Telefone");
+        FieldValidation.setTextFieldLimit(newPhoneField, 20);
+        FieldValidation.setNumericField(newPhoneField);
         phoneContainer.getChildren().add(newPhoneField);
     }
 
@@ -187,69 +228,143 @@ public class FuncionarioEditarController {
 
     @FXML
     private void updateFuncionario() {
-        String sqlUpdatePerson = "UPDATE pessoa SET email=?, nome=?, cpf=?, razao_social=?, cnpj=?, tipo=? WHERE id=?";
-        String sqlUpdateAddress = "UPDATE endereco SET rua=?, numero=?, bairro=?, cidade=?, estado=?, cep=? WHERE fk_pessoa_id=?";
-        String sqlUpdateFuncionario = "UPDATE funcionario SET data_de_contratacao=?, salario=?, status=?, fk_departamento_id=?, gerente_fk_funcionario_id=? WHERE fk_pessoa_id=?";
-        try (Connection conn = DatabaseConnector.getConnection();
-             PreparedStatement stmtPerson = conn.prepareStatement(sqlUpdatePerson);
-             PreparedStatement stmtAddress = conn.prepareStatement(sqlUpdateAddress);
-             PreparedStatement stmtFuncionario = conn.prepareStatement(sqlUpdateFuncionario)) {
+        if (!validateFields()) {
+            return;
+        }
 
-            conn.setAutoCommit(false);
+        String email = emailField.getText() != null ? emailField.getText().trim() : "";
+        String nome = nomeField.getText() != null ? nomeField.getText().trim() : "";
+        String cpf = cpfField.getText() != null ? cpfField.getText().trim() : "";
+        String razaoSocial = razaoSocialField.getText() != null ? razaoSocialField.getText().trim() : "";
+        String cnpj = cnpjField.getText() != null ? cnpjField.getText().trim() : "";
+        String rua = ruaField.getText() != null ? ruaField.getText().trim() : "";
+        String numero = numeroField.getText() != null ? numeroField.getText().trim() : "";
+        String bairro = bairroField.getText() != null ? bairroField.getText().trim() : "";
+        String cidade = cidadeField.getText() != null ? cidadeField.getText().trim() : "";
+        String cep = cepField.getText() != null ? cepField.getText().trim() : "";
+        String estado = estadoComboBox.getValue() != null ? estadoComboBox.getValue() : "";
+
+        LocalDate dataContratacao = dataContratacaoPicker.getValue();
+        String salario = salarioField.getText().trim();
+        String status = ativoRadioButton.isSelected() ? "Ativo" : "Inativo";
+        String departamento = departamentoComboBox.getValue();
+        String gerente = gerenteComboBox.getValue();
+
+        Connection conn = null;
+        PreparedStatement stmtPerson = null;
+        PreparedStatement stmtAddress = null;
+
+        try {
+            conn = DatabaseConnector.getConnection();
+            conn.setAutoCommit(false); // transaction
 
             // Update person
-            stmtPerson.setString(1, emailField.getText());
-            stmtPerson.setString(2, pfRadioButton.isSelected() ? nomeField.getText() : null);
-            stmtPerson.setString(3, pfRadioButton.isSelected() ? cpfField.getText() : null);
-            stmtPerson.setString(4, pjRadioButton.isSelected() ? razaoSocialField.getText() : null);
-            stmtPerson.setString(5, pjRadioButton.isSelected() ? cnpjField.getText() : null);
+            stmtPerson = conn.prepareStatement(
+                    "UPDATE pessoa SET email=?, nome=?, cpf=?, razao_social=?, cnpj=?, tipo=? WHERE id=?");
+            stmtPerson.setString(1, email.isEmpty() ? null : email);
+            stmtPerson.setString(2, pfRadioButton.isSelected() ? (nome.isEmpty() ? null : nome) : null);
+            stmtPerson.setString(3, pfRadioButton.isSelected() ? (cpf.isEmpty() ? null : cpf) : null);
+            stmtPerson.setString(4, pjRadioButton.isSelected() ? (razaoSocial.isEmpty() ? null : razaoSocial) : null);
+            stmtPerson.setString(5, pjRadioButton.isSelected() ? (cnpj.isEmpty() ? null : cnpj) : null);
             stmtPerson.setString(6, pfRadioButton.isSelected() ? "PF" : "PJ");
             stmtPerson.setLong(7, selectedFuncionarioId);
             stmtPerson.executeUpdate();
 
             // Update address
-            stmtAddress.setString(1, ruaField.getText());
-            stmtAddress.setString(2, numeroField.getText());
-            stmtAddress.setString(3, bairroField.getText());
-            stmtAddress.setString(4, cidadeField.getText());
-            stmtAddress.setString(5, estadoComboBox.getValue());
-            stmtAddress.setString(6, cepField.getText());
+            stmtAddress = conn.prepareStatement(
+                    "UPDATE endereco SET rua=?, numero=?, bairro=?, cidade=?, estado=?, cep=? WHERE fk_pessoa_id=?");
+            stmtAddress.setString(1, rua.isEmpty() ? null : rua);
+            stmtAddress.setString(2, numero.isEmpty() ? null : numero);
+            stmtAddress.setString(3, bairro.isEmpty() ? null : bairro);
+            stmtAddress.setString(4, cidade.isEmpty() ? null : cidade);
+            stmtAddress.setString(5, estado.isEmpty() ? null : estado);
+            stmtAddress.setString(6, cep.isEmpty() ? null : cep);
             stmtAddress.setLong(7, selectedFuncionarioId);
             stmtAddress.executeUpdate();
 
-            // Update funcionario-specific data
-            stmtFuncionario.setDate(1, Date.valueOf(dataContratacaoPicker.getValue()));
-            stmtFuncionario.setBigDecimal(2, new BigDecimal(salarioField.getText()));
-            stmtFuncionario.setString(3, ativoRadioButton.isSelected() ? "Ativo" : "Inativo");
+            // Update funcionario data
+            PreparedStatement stmtFuncionario = conn.prepareStatement(
+                    "UPDATE funcionario SET data_de_contratacao=?, salario=?, status=?, fk_departamento_id=?, gerente_fk_funcionario_id=? WHERE fk_pessoa_id=?");
+            stmtFuncionario.setDate(1, dataContratacao != null ? Date.valueOf(dataContratacao) : null);
+            stmtFuncionario.setBigDecimal(2, salario.isEmpty() ? null : new BigDecimal(salario));
+            stmtFuncionario.setString(3, status);
 
-            String selectedDepartamento = departamentoComboBox.getValue();
-            if ("Nenhum".equals(selectedDepartamento)) {
+            if (departamento == null || departamento.equals("Nenhum")) {
                 stmtFuncionario.setNull(4, java.sql.Types.INTEGER);
             } else {
-                stmtFuncionario.setInt(4, Integer.parseInt(selectedDepartamento.split(" - ")[0]));
+                stmtFuncionario.setInt(4, Integer.parseInt(departamento.split(" - ")[0]));
             }
 
-            String selectedGerente = gerenteComboBox.getValue();
-            if ("Nenhum".equals(selectedGerente)) {
+            if (gerente == null || gerente.equals("Nenhum")) {
                 stmtFuncionario.setNull(5, java.sql.Types.INTEGER);
             } else {
-                stmtFuncionario.setInt(5, Integer.parseInt(selectedGerente.split(" - ")[0]));
+                stmtFuncionario.setInt(5, Integer.parseInt(gerente.split(" - ")[0]));
             }
 
             stmtFuncionario.setLong(6, selectedFuncionarioId);
             stmtFuncionario.executeUpdate();
 
-            // Update phones
+            // Update phone
             updatePhoneData(conn);
 
             conn.commit();
             statusLabel.setText("Funcionário atualizado com sucesso.");
         } catch (SQLException ex) {
             ex.printStackTrace();
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
             statusLabel.setText("Erro ao atualizar os dados do funcionário.");
+        } finally {
+            try {
+                if (stmtPerson != null) stmtPerson.close();
+                if (stmtAddress != null) stmtAddress.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
+    private boolean validateFields() {
+        String email = emailField.getText() != null ? emailField.getText().trim() : "";
+        String nome = nomeField.getText() != null ? nomeField.getText().trim() : "";
+        String cpf = cpfField.getText() != null ? cpfField.getText().trim() : "";
+        String razaoSocial = razaoSocialField.getText() != null ? razaoSocialField.getText().trim() : "";
+        String cnpj = cnpjField.getText() != null ? cnpjField.getText().trim() : "";
+
+        String salario = salarioField.getText() != null ? salarioField.getText().trim() : "";
+
+        if ((pfRadioButton.isSelected() && (nome.isEmpty() || cpf.isEmpty())) ||
+                (pjRadioButton.isSelected() && (razaoSocial.isEmpty() || cnpj.isEmpty()))) {
+            statusLabel.setText("Por favor, preencha os campos obrigatórios.");
+            return false;
+        }
+
+        if (!email.isEmpty() && !FieldValidation.isUniqueField("email", email, selectedFuncionarioId)) {
+            statusLabel.setText("Email já está em uso.");
+            return false;
+        }
+
+        if (pfRadioButton.isSelected() && !cpf.isEmpty() && !FieldValidation.isUniqueField("cpf", cpf, selectedFuncionarioId)) {
+            statusLabel.setText("CPF já está em uso.");
+            return false;
+        }
+
+        if (pjRadioButton.isSelected() && !cnpj.isEmpty() && !FieldValidation.isUniqueField("cnpj", cnpj, selectedFuncionarioId)) {
+            statusLabel.setText("CNPJ já está em uso.");
+            return false;
+        }
+
+        if (!salario.isEmpty() && !salario.matches("\\d+(\\.\\d{1,2})?")) {
+            statusLabel.setText("Por favor, insira um valor de salário válido.");
+            return false;
+        }
+
+        return true;
+    }
 
     private void updatePhoneData(Connection conn) throws SQLException {
         try (PreparedStatement stmtDelete = conn.prepareStatement("DELETE FROM telefone WHERE fk_pessoa_id = ?")) {
