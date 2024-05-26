@@ -17,6 +17,7 @@ public class FuncionarioCriarController {
 
     // PF or PJ?
     @FXML private RadioButton pfRadioButton;
+    @FXML private RadioButton pjRadioButton;
     @FXML private ToggleGroup typeToggleGroup;
 
     // Pessoa
@@ -25,6 +26,8 @@ public class FuncionarioCriarController {
     @FXML private TextField nomeField;
     @FXML private TextField cpfField;
 
+    @FXML private TextField razaoSocialField;
+    @FXML private TextField cnpjField;
 
     // Telefone
     @FXML private VBox phoneContainer;
@@ -59,6 +62,7 @@ public class FuncionarioCriarController {
     private void initialize() {
         typeToggleGroup = new ToggleGroup();
         pfRadioButton.setToggleGroup(typeToggleGroup);
+        pjRadioButton.setToggleGroup(typeToggleGroup);
         pfRadioButton.setSelected(true); // pf default
 
         updateFieldAccess(pfRadioButton.getText());
@@ -88,6 +92,16 @@ public class FuncionarioCriarController {
         nomeField.setDisable(!isPF);
         cpfField.setDisable(!isPF);
 
+        razaoSocialField.setDisable(isPF);
+        cnpjField.setDisable(isPF);
+
+        if (isPF) {
+            razaoSocialField.clear();
+            cnpjField.clear();
+        } else {
+            nomeField.clear();
+            cpfField.clear();
+        }
     }
 
     @FXML
@@ -128,12 +142,14 @@ public class FuncionarioCriarController {
 
             // Insert into pessoa table
             stmt = conn.prepareStatement(
-                    "INSERT INTO pessoa (email, tipo, nome, cpf, razao_social, cnpj) VALUES (?, ?, ?, ?, null, null)",
+                    "INSERT INTO pessoa (email, tipo, nome, cpf, razao_social, cnpj) VALUES (?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, email);
             stmt.setString(2, tipo);
             stmt.setString(3, tipo.equals("PF") ? nomeField.getText().trim() : null);
             stmt.setString(4, tipo.equals("PF") ? cpfField.getText().trim() : null);
+            stmt.setString(5, tipo.equals("PJ") ? razaoSocialField.getText().trim() : null);
+            stmt.setString(6, tipo.equals("PJ") ? cnpjField.getText().trim() : null);
             stmt.executeUpdate();
 
             generatedKeys = stmt.getGeneratedKeys();
@@ -149,7 +165,7 @@ public class FuncionarioCriarController {
                 stmt.setBigDecimal(2, new BigDecimal(salario));
                 stmt.setString(3, status);
                 stmt.setLong(4, pessoaId);
-                stmt.setObject(5, getDepartamentoId(departamento));
+                stmt.setObject(5, departamento.equals("Nenhum") ? null : getDepartamentoId(departamento));
                 stmt.setObject(6, gerente.equals("Nenhum") ? null : getFuncionarioId(gerente));
                 stmt.executeUpdate();
 
@@ -202,6 +218,7 @@ public class FuncionarioCriarController {
 
     private void populateDepartamentoComboBox() {
         departamentoComboBox.getItems().clear();
+        departamentoComboBox.getItems().add("Nenhum");
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT nome FROM departamento")) {
             ResultSet rs = stmt.executeQuery();

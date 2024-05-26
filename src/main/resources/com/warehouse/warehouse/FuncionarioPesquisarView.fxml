@@ -9,8 +9,8 @@
         <VBox alignment="TOP_LEFT" maxWidth="700">
             <HBox spacing="20" maxWidth="780" alignment="CENTER_LEFT">
                 <VBox spacing="10" style="-fx-padding: 10;" minWidth="280" maxWidth="280">
-                    <TextField fx:id="searchNameField" promptText="Nome" maxWidth="280"/>
-                    <TextField fx:id="searchCpfField" promptText="CPF" maxWidth="280"/>
+                    <TextField fx:id="searchNameField" promptText="Nome ou Razão Social" maxWidth="280"/>
+                    <TextField fx:id="searchCpfField" promptText="CPF ou CNPJ" maxWidth="280"/>
                     <TextField fx:id="searchIdField" promptText="ID" maxWidth="280"/>
                     <ComboBox fx:id="searchDepartamentoField" promptText="Departamento" maxWidth="280"/>
                     <Button text="Pesquisar" onAction="#handleSearch" maxWidth="80"/>
