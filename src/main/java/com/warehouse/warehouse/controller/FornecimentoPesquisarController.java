@@ -29,7 +29,7 @@ public class FornecimentoPesquisarController {
     @FXML
     private ListView<String> fornecedorList;
     @FXML
-    private Label statusLabel; // Adicione esta linha para o statusLabel
+    private Label statusLabel;
 
     @FXML
     private void initialize() {
@@ -89,16 +89,19 @@ public class FornecimentoPesquisarController {
                 int id = Integer.parseInt(searchId);
                 if (id < 0) {
                     statusLabel.setText("ID inválido. Insira um ID positivo.");
+                    fornecedorList.getItems().clear();
                     return;
                 }
 
                 if (!doesIdExist(id)) {
                     statusLabel.setText("ID não encontrado.");
+                    fornecedorList.getItems().clear();
                     return;
                 }
 
             } catch (NumberFormatException e) {
                 statusLabel.setText("ID inválido. Insira um número válido.");
+                fornecedorList.getItems().clear();
                 return;
             }
         }
@@ -146,12 +149,15 @@ public class FornecimentoPesquisarController {
 
             if (fornecimentos.isEmpty()) {
                 statusLabel.setText("Nenhum fornecimento registrado.");
+                fornecedorList.getItems().clear();
             } else {
                 fornecedorList.setItems(fornecimentos);
-                statusLabel.setText(""); // Limpa a mensagem de status em caso de sucesso
+                statusLabel.setText("");
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+            statusLabel.setText("Erro ao realizar a pesquisa.");
+            fornecedorList.getItems().clear();
         }
     }
 
