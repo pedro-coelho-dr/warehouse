@@ -31,7 +31,7 @@ INSERT INTO categoria (nome, descricao) VALUES
 
 -- Insert produtos
 INSERT INTO produto (nome, descricao, preco_venda, preco_aluguel, quantidade_estoque, fk_categoria_id) VALUES
-                                                                                                           ('Cimento Tododia', 'Saco de cimento 50kg', 25.00, NULL, 500, 1),
+                                                                                                           ('Cimento Tododia', 'Saco de cimento 50kg', 25.00, 0.00, 500, 1),
                                                                                                            ('Martelo de Aço', 'Martelo robusto para construção', 45.00, 5.00, 50, 2);
 
 -- Insert pedidos
