@@ -200,7 +200,7 @@ public class FuncionarioCriarController {
                 // Insert into funcionario table
                 stmt.close();
                 stmt = conn.prepareStatement(
-                        "INSERT INTO funcionario (data_de_contratacao, salario, status, fk_pessoa_id, fk_departamento_id, gerente_fk_funcionario_id) VALUES (?, ?, ?, ?, ?, ?)");
+                        "INSERT INTO funcionario (data_contratacao, salario, status, fk_pessoa_id, fk_departamento_id, gerente_fk_funcionario_id) VALUES (?, ?, ?, ?, ?, ?)");
                 stmt.setDate(1, dataContratacao != null ? Date.valueOf(dataContratacao) : null);
                 stmt.setBigDecimal(2, salario.isEmpty() ? null : new BigDecimal(salario));
                 stmt.setString(3, status);

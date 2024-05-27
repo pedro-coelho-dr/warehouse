@@ -51,10 +51,10 @@ Use uma IDE, como IntelliJ, Dbeaver...
 
 Alternativamente, dentro do shell do mysql:
 ```bash
-source /opt/db/initdb.sql
+source /opt/database_scripts/initdb.sql
 ```
 ```bash
-source /opt/db/populatedb.sql
+source /opt/database_scripts/populatedb.sql
 ```
 
 ### Rodar a aplicação
