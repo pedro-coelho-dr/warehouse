@@ -82,6 +82,9 @@ public class MainController {
             else if (controller instanceof ProdutoPesquisarController) {
                 ((ProdutoPesquisarController) controller).setMainController(this);
             }
+            else if (controller instanceof CategoriaPesquisarController) {
+                ((CategoriaPesquisarController) controller).setMainController(this);
+            }
             contentArea.getChildren().setAll(view);
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,6 +169,10 @@ public class MainController {
             else if (fxmlFile.equals("ProdutoEditarView")) {
                 ProdutoEditarController controller = loader.getController();
                 controller.setSelectedProductId(tableId);
+            }
+            else if (fxmlFile.equals("CategoriaEditarView")) {
+                CategoriaEditarController controller = loader.getController();
+                controller.setSelectedCategoryId(tableId);
             }
             contentArea.getChildren().setAll(view);
         } catch (Exception e) {
