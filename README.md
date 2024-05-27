@@ -82,7 +82,30 @@ A estrutura básica do projeto é a seguinte:
 ![warehouse_flux](https://github.com/pedro-coelho-dr/warehouse/assets/111138996/b9791bdc-606c-4a5f-bd7c-2f3ceae17399)
 
 ## Equipe
-
-- [Caio César](https://github.com/Kal-0)
-- [Diogo Henrique](https://github.com/DiogoHMC)
-- [Pedro Coelho](https://github.com/pedro-coelho-dr)
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Kal-0">
+        <img src="https://avatars.githubusercontent.com/u/106926790?s=400&u=d51d91a8d447afbb4a9d0be21d664b82d7091fc5&v=4" width="100px;" alt="Foto Kal"/><br>
+        <sub>
+          <b>Caio Cesar</b>
+        </sub>
+      </a>
+    </td>
+          <td align="center">
+      <a href="https://github.com/DiogoHMC">
+        <img src="https://avatars.githubusercontent.com/u/116087739?s=400&u=7b127b8ccdb42826d3ab422ea188bc3e0c6f5c23&v=4" width="100px;" alt="Foto Kal"/><br>
+        <sub>
+          <b>Diogo Henrique</b>
+        </sub>
+      </a>
+    </td>
+          <td align="center">
+      <a href="https://github.com/pedro-coelho-dr">
+        <img src="https://avatars.githubusercontent.com/u/111138996?v=4" width="100px;" alt="Foto Kal"/><br>
+        <sub>
+          <b>Pedro Coelho</b>
+        </sub>
+      </a>
+    </td>
+  </table>
