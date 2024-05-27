@@ -148,7 +148,7 @@ public class FuncionarioEditarController {
     }
 
     private void loadFuncionarioSpecificData(ResultSet rs) throws SQLException {
-        Date dateContratacao = rs.getDate("data_de_contratacao");
+        Date dateContratacao = rs.getDate("data_contratacao");
         if (dateContratacao != null) {
             dataContratacaoPicker.setValue(dateContratacao.toLocalDate());
         }
@@ -284,7 +284,7 @@ public class FuncionarioEditarController {
 
             // Update funcionario data
             PreparedStatement stmtFuncionario = conn.prepareStatement(
-                    "UPDATE funcionario SET data_de_contratacao=?, salario=?, status=?, fk_departamento_id=?, gerente_fk_funcionario_id=? WHERE fk_pessoa_id=?");
+                    "UPDATE funcionario SET data_contratacao=?, salario=?, status=?, fk_departamento_id=?, gerente_fk_funcionario_id=? WHERE fk_pessoa_id=?");
             stmtFuncionario.setDate(1, dataContratacao != null ? Date.valueOf(dataContratacao) : null);
             stmtFuncionario.setBigDecimal(2, salario.isEmpty() ? null : new BigDecimal(salario));
             stmtFuncionario.setString(3, status);

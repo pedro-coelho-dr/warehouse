@@ -9,17 +9,17 @@ CREATE TABLE pessoa (
                         email VARCHAR(100) UNIQUE,
                         tipo VARCHAR(2) CHECK (tipo IN ('PF', 'PJ')),
 
-                        -- Pessoa Física
+    -- Pessoa Física
                         nome VARCHAR(100),
                         cpf VARCHAR(14) UNIQUE,
 
-                        -- Pessoa Jurídica
+    -- Pessoa Jurídica
                         razao_social VARCHAR(100),
                         cnpj VARCHAR(18) UNIQUE,
 
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
- );
+);
 
 CREATE TABLE cliente (
                          fk_pessoa_id INT PRIMARY KEY,
@@ -38,7 +38,7 @@ CREATE TABLE departamento (
 );
 
 CREATE TABLE funcionario (
-                             data_de_contratacao DATE,
+                             data_contratacao DATE,
                              salario DECIMAL(10,2),
                              status VARCHAR(15) CHECK (status IN ('Ativo', 'Inativo')),
 
@@ -73,6 +73,7 @@ CREATE TABLE pedido (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         valor_total DECIMAL(10,2),
                         desconto DECIMAL(10,2),
+                        data_expedicao DATE,
 
                         fk_cliente_id INT,
                         fk_funcionario_id INT,
@@ -102,7 +103,7 @@ CREATE TABLE venda (
 );
 
 CREATE TABLE aluguel (
-                         dt_devolucao DATE,
+                         data_devolucao DATE,
                          fk_pedido_id INT PRIMARY KEY,
                          status VARCHAR(15) CHECK (status IN ('Entregue', 'Devolvido')),
                          FOREIGN KEY (fk_pedido_id) REFERENCES pedido (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -110,17 +111,17 @@ CREATE TABLE aluguel (
 
 
 CREATE TABLE fornece (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        preco_compra DECIMAL(10,2),
-                        quantidade INT,
-                        fk_fornecedor_id INT,
-                        fk_produto_id INT,
+                         id INT AUTO_INCREMENT PRIMARY KEY,
+                         preco_compra DECIMAL(10,2),
+                         quantidade INT,
+                         fk_fornecedor_id INT,
+                         fk_produto_id INT,
 
-                        FOREIGN KEY (fk_fornecedor_id) REFERENCES fornecedor (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                        FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                         FOREIGN KEY (fk_fornecedor_id) REFERENCES fornecedor (fk_pessoa_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                         FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE,
 
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 
@@ -156,8 +157,8 @@ CREATE TABLE endereco (
 DELIMITER $$
 
 CREATE TRIGGER atualizar_quantidade_produto
-AFTER INSERT ON fornece
-FOR EACH ROW
+    AFTER INSERT ON fornece
+    FOR EACH ROW
 BEGIN
     UPDATE produto
     SET quantidade_estoque = quantidade_estoque + NEW.quantidade

@@ -21,7 +21,7 @@ INSERT INTO departamento (nome, descricao) VALUES
                                                ('Logística', 'Gerencia o estoque e a distribuição de produtos');
 
 -- Insert funcionarios
-INSERT INTO funcionario (data_de_contratacao, salario, status, fk_pessoa_id, gerente_fk_funcionario_id, fk_departamento_id) VALUES
+INSERT INTO funcionario (data_contratacao, salario, status, fk_pessoa_id, gerente_fk_funcionario_id, fk_departamento_id) VALUES
     ('2022-07-20', 2200.00, 'Ativo', 2, NULL, 2);
 
 -- Insert categorias
@@ -35,9 +35,9 @@ INSERT INTO produto (nome, descricao, preco_venda, preco_aluguel, quantidade_est
                                                                                                            ('Martelo de Aço', 'Martelo robusto para construção', 45.00, 5.00, 50, 2);
 
 -- Insert pedidos
-INSERT INTO pedido (valor_total, desconto, fk_cliente_id, fk_funcionario_id) VALUES
-                                                                                 (475.00, 25.00, 1, 2),
-                                                                                 (90.00, 0.00, 1, 2);
+INSERT INTO pedido (valor_total, desconto, data_expedicao, fk_cliente_id, fk_funcionario_id) VALUES
+                                                                                 (475.00, 25.00, '2022-07-20', 1, 2),
+                                                                                 (90.00, 0.00, '2022-07-21', 1, 2);
 
 -- Insert carrinhos
 INSERT INTO carrinho (quantidade, fk_pedido_id, fk_produto_id) VALUES
@@ -49,7 +49,7 @@ INSERT INTO venda (fk_pedido_id) VALUES
     (2);
 
 -- Insert alugueis
-INSERT INTO aluguel (dt_devolucao, fk_pedido_id, status) VALUES
+INSERT INTO aluguel (data_devolucao, fk_pedido_id, status) VALUES
     ('2024-07-15', 1, 'Entregue');
 
 -- Insert fornecimentos
