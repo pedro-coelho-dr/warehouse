@@ -72,11 +72,11 @@ A estrutura básica do projeto é a seguinte:
 - `src/main/resources`: Contém os arquivos FXML para a interface gráfica.
 - `database`: Contém os scripts SQL para inicialização e população do banco de dados.
 
-### Minimundo
+### Modelo Conceitual
+![armazem_logico](https://github.com/pedro-coelho-dr/warehouse/assets/111138996/4a6b539f-f7eb-4ae1-88f1-bcd640b3e559)
 
-### Mapa Conceitual
-
-### Mapa Lógico
+### Modelo Lógico
+![armazem_logico](https://github.com/pedro-coelho-dr/warehouse/assets/111138996/638d13d8-abf1-47b9-9a5f-f1382dfe83dc)
 
 ### Diaagrama de Fluxo
 ![warehouse_flux](https://github.com/pedro-coelho-dr/warehouse/assets/111138996/b9791bdc-606c-4a5f-bd7c-2f3ceae17399)
