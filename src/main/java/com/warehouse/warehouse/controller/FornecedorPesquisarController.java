@@ -30,7 +30,8 @@ public class FornecedorPesquisarController {
     @FXML
     private void handleSearch() {
         ObservableList<String> fornecedores = FXCollections.observableArrayList();
-        StringBuilder sql = new StringBuilder("SELECT pessoa.id, pessoa.nome, pessoa.cpf, pessoa.razao_social, pessoa.cnpj, pessoa.tipo FROM pessoa JOIN fornecedor ON pessoa.id = fornecedor.fk_pessoa_id WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT pessoa.id, pessoa.nome, pessoa.cpf, pessoa.razao_social, pessoa.cnpj, pessoa.tipo" +
+                " FROM pessoa JOIN fornecedor ON pessoa.id = fornecedor.fk_pessoa_id WHERE 1=1");
 
         if (!searchNameField.getText().isEmpty()) {
             sql.append(" AND (LOWER(pessoa.nome) LIKE ? OR LOWER(pessoa.razao_social) LIKE ?)");
