@@ -6,6 +6,9 @@
             stylesheets="@css/style.css">
     <top>
         <MenuBar>
+            <Menu text="Inicio">
+                <MenuItem text="Dashboard" onAction="#loadDashboard"/>
+            </Menu>
             <Menu text="Pedido">
                 <MenuItem text="Novo Pedido" onAction="#pedidoCriar"/>
                 <MenuItem text="Pesquisar" onAction="#pesquisarPedido"/>
