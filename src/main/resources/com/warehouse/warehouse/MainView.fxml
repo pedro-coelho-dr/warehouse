@@ -7,7 +7,7 @@
     <top>
         <MenuBar>
             <Menu text="Pedido">
-                <MenuItem text="Novo Pedido" onAction="#novoPedido"/>
+                <MenuItem text="Novo Pedido" onAction="#pedidoCriar"/>
                 <MenuItem text="Pesquisar" onAction="#pesquisarPedido"/>
             </Menu>
             <Menu text="Produto">

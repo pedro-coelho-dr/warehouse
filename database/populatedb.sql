@@ -1,5 +1,4 @@
 USE warehouse;
-
 -- Insert pessoas
 INSERT INTO pessoa (email, tipo, nome, cpf, razao_social, cnpj) VALUES
                                                                     ('joao.silva@example.com', 'PF', 'João Silva', '12345678909', NULL, NULL),

@@ -108,7 +108,8 @@ public class ProdutoEditarController {
 
         int categoriaId = categoriaIds.get(categoriaComboBox.getSelectionModel().getSelectedIndex());
 
-        String sql = "UPDATE produto SET nome=?, descricao=?, preco_venda=?, preco_aluguel=?, quantidade_estoque=?, fk_categoria_id=? WHERE id=?";
+        String sql = "UPDATE produto SET nome=?, descricao=?, preco_venda=?, preco_aluguel=?, quantidade_estoque=?," +
+                " fk_categoria_id=? WHERE id=?";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
