@@ -156,7 +156,7 @@ CREATE TABLE endereco (
 
 DELIMITER $$
 
-CREATE TRIGGER atualizar_quantidade_produto
+CREATE TRIGGER atualizar_quantidade_produto_fornecimento;
     AFTER INSERT ON fornece
     FOR EACH ROW
 BEGIN
@@ -166,3 +166,19 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER atualizar_quantidade_produto_venda
+    AFTER INSERT ON carrinho
+    FOR EACH ROW
+BEGIN
+    UPDATE produto
+    SET quantidade_estoque = quantidade_estoque - NEW.quantidade
+    WHERE id = NEW.fk_produto_id;
+END$$
+
+DELIMITER ;
+
+
+

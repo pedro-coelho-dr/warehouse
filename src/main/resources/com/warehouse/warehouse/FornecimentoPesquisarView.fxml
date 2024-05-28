@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoPesquisarController" stylesheets="/com/warehouse/warehouse/css/style.css">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoPesquisarController">
     <Label fx:id="titleLabel" style="-fx-font-size: 24px;" text="Pesquisar Fornecimento" />
     <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" maxWidth="700" minWidth="700" vbarPolicy="AS_NEEDED">
         <VBox alignment="TOP_LEFT" maxWidth="700">
@@ -23,6 +23,7 @@
                     <Label opacity="0.0" prefHeight="0.0" prefWidth="200" text="ID do Fornecimento:" />
                     <TextField fx:id="searchIdField" maxWidth="280" promptText="ID do fornecimento " />
                     <Button maxWidth="80" onAction="#handleSearch" text="Pesquisar" />
+                    <Label fx:id="statusLabel" text=" " style="-fx-text-fill: red;" />
                 </VBox>
                 <VBox maxWidth="390" minWidth="390" spacing="10" style="-fx-padding: 10;">
                     <ListView fx:id="fornecedorList" prefHeight="400" prefWidth="390" />
