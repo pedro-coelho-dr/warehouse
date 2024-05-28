@@ -87,9 +87,10 @@ CREATE TABLE pedido (
 
 
 CREATE TABLE carrinho (
+                          id INT AUTO_INCREMENT PRIMARY KEY,
                           quantidade INT,
 
-                          fk_pedido_id INT PRIMARY KEY,
+                          fk_pedido_id INT,
                           FOREIGN KEY (fk_pedido_id) REFERENCES pedido (id) ON DELETE CASCADE ON UPDATE CASCADE,
                           fk_produto_id INT,
                           FOREIGN KEY (fk_produto_id) REFERENCES produto (id) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -156,7 +157,7 @@ CREATE TABLE endereco (
 
 DELIMITER $$
 
-CREATE TRIGGER atualizar_quantidade_produto_fornecimento;
+CREATE TRIGGER atualizar_quantidade_produto_fornecimento
     AFTER INSERT ON fornece
     FOR EACH ROW
 BEGIN
@@ -173,9 +174,19 @@ CREATE TRIGGER atualizar_quantidade_produto_venda
     AFTER INSERT ON carrinho
     FOR EACH ROW
 BEGIN
+    DECLARE preco DECIMAL(10,2);
+    -- Obter o preço de venda do produto
+    SELECT preco_venda INTO preco FROM produto WHERE id = NEW.fk_produto_id;
+
+    -- Atualizar a quantidade em estoque
     UPDATE produto
     SET quantidade_estoque = quantidade_estoque - NEW.quantidade
     WHERE id = NEW.fk_produto_id;
+
+    -- Atualizar o valor total do pedido
+    UPDATE pedido
+    SET valor_total = valor_total + (preco * NEW.quantidade)
+    WHERE id = NEW.fk_pedido_id;
 END$$
 
 DELIMITER ;
