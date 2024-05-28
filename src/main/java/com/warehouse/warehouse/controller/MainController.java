@@ -75,6 +75,10 @@ public class MainController {
         loadView("PedidoCriarView");
     }
 
+    public void visualizarPedido(ActionEvent event) {
+        loadView("PedidoVisualizarView");
+    }
+
     private void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
@@ -94,6 +98,9 @@ public class MainController {
             }
             else if (controller instanceof CategoriaPesquisarController) {
                 ((CategoriaPesquisarController) controller).setMainController(this);
+            }
+            else if (controller instanceof PedidoPesquisarController) {
+                ((PedidoPesquisarController) controller).setMainController(this);
             }
             contentArea.getChildren().setAll(view);
         } catch (Exception e) {
@@ -190,5 +197,18 @@ public class MainController {
         }
     }
 
+    public void loadViewPedido(String fxmlFile, long pedidoId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
+            Node view = loader.load();
+            if (fxmlFile.equals("PedidoVisualizarView")) {
+                PedidoVisualizarController controller = loader.getController();
+                controller.setSelectedPedidoId(pedidoId);
+            }
+            contentArea.getChildren().setAll(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
