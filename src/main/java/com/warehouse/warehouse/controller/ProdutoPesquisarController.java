@@ -61,7 +61,8 @@ public class ProdutoPesquisarController {
     @FXML
     private void handleSearch() {
         ObservableList<String> products = FXCollections.observableArrayList();
-        StringBuilder sql = new StringBuilder("SELECT produto.id, produto.nome, produto.descricao, categoria.nome AS categoria_nome FROM produto JOIN categoria ON produto.fk_categoria_id = categoria.id WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT produto.id, produto.nome, produto.descricao, categoria.nome AS" +
+                " categoria_nome FROM produto JOIN categoria ON produto.fk_categoria_id = categoria.id WHERE 1=1");
 
         if (!searchNameField.getText().isEmpty()) {
             sql.append(" AND LOWER(produto.nome) LIKE ?");

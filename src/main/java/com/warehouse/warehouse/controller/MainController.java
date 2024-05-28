@@ -71,6 +71,10 @@ public class MainController {
 
     public void loadDashboard(ActionEvent event) { loadView("DashboardView"); }
 
+    public void pedidoCriar(ActionEvent event) {
+        loadView("PedidoCriarView");
+    }
+
     private void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/warehouse/warehouse/" + fxmlFile + ".fxml"));
