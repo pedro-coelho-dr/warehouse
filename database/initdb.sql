@@ -156,7 +156,7 @@ CREATE TABLE endereco (
 
 DELIMITER $$
 
-CREATE TRIGGER atualizar_quantidade_produto_fornecimento;
+CREATE TRIGGER atualizar_quantidade_produto_fornecimento
     AFTER INSERT ON fornece
     FOR EACH ROW
 BEGIN

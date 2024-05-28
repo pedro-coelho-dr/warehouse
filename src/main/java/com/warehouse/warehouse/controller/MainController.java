@@ -9,6 +9,10 @@ public class MainController {
 
     public StackPane contentArea;
 
+    public void loadInitialDashboard() {
+        loadView("DashboardView");
+    }
+
     public void novoPedido(ActionEvent event) { loadView("PedidoNovoView");}
 
     public void pesquisarPedido(ActionEvent event) { loadView("PedidoPesquisarView");}
@@ -64,6 +68,8 @@ public class MainController {
     public void fornecimentoCriar(ActionEvent event) {
         loadView("FornecimentoCriarView");
     }
+
+    public void loadDashboard(ActionEvent event) { loadView("DashboardView"); }
 
     private void loadView(String fxmlFile) {
         try {

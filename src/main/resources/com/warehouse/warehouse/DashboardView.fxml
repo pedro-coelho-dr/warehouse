@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.warehouse.warehouse.controller.DashboardController"
+      style="-fx-padding: 20;">
+    <Label fx:id="titleLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Dashboard" alignment="CENTER" />
+
+    <GridPane hgap="20" vgap="20" alignment="CENTER">
+        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label text="Total Clientes:" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="totalClientesLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label text="Total Funcionários:" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="totalFuncionariosLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="0">
+            <Label text="Total Fornecedores:" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="totalFornecedoresLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label text="Total Produtos:" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="totalProdutosLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="Total Pedidos:" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="totalPedidosLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+    </GridPane>
+
+    <Separator />
+
+    <TitledPane text="Produtos Mais Vendidos" expanded="true">
+        <VBox spacing="20">
+            <ListView fx:id="bestSellingProductsList" prefHeight="100"/>
+        </VBox>
+    </TitledPane>
+
+    <TitledPane text="Produtos Esgotados" expanded="false">
+        <VBox spacing="20">
+            <ListView fx:id="outOfStockProductsList" prefHeight="100"/>
+        </VBox>
+    </TitledPane>
+
+    <Separator />
+
+    <TitledPane text="Total Vendas do Mês" expanded="false">
+        <VBox spacing="20">
+            <Label fx:id="totalVendasMesLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+    </TitledPane>
+
+    <TitledPane text="Total Pedidos do Mês" expanded="false">
+        <VBox spacing="20">
+            <Label fx:id="totalPedidosMesLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+    </TitledPane>
+
+    <Separator />
+
+    <TitledPane text="Funcionário do Mês" expanded="false">
+        <VBox spacing="20">
+            <Label fx:id="funcionarioMesLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+    </TitledPane>
+
+    <TitledPane text="Cliente do Mês" expanded="false">
+        <VBox spacing="20">
+            <Label fx:id="clienteMesLabel" style="-fx-font-size: 18px;" />
+        </VBox>
+    </TitledPane>
+</VBox>
