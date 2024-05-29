@@ -4,7 +4,6 @@ import com.warehouse.warehouse.database.DatabaseConnector;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -21,9 +20,9 @@ public class FornecimentoPesquisarController {
     @FXML
     private Label titleLabel;
     @FXML
-    private ComboBox<String> nomeProdutoComboBox;
+    private TextField nomeProdutoTextField;
     @FXML
-    private ComboBox<String> nomeFornecedorComboBox;
+    private TextField nomeFornecedorTextField;
     @FXML
     private TextField searchIdField;
     @FXML
@@ -35,54 +34,13 @@ public class FornecimentoPesquisarController {
     private void initialize() {
         titleLabel.setText("Pesquisar Fornecimento");
         fornecedorList.setItems(FXCollections.observableArrayList());
-        populateNomeProdutoComboBox();
-        populateNomeFornecedorComboBox();
-    }
-
-    private void populateNomeProdutoComboBox() {
-        nomeProdutoComboBox.getItems().clear();
-        try (Connection conn = DatabaseConnector.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.nome FROM produto p");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String nome = rs.getString("nome");
-                if (nome != null && !nome.isEmpty()) {
-                    nomeProdutoComboBox.getItems().add(nome);
-                }
-            }
-            nomeProdutoComboBox.getItems().add("Nenhum Produto");
-            nomeProdutoComboBox.getSelectionModel().selectLast();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void populateNomeFornecedorComboBox() {
-        nomeFornecedorComboBox.getItems().clear();
-        try (Connection conn = DatabaseConnector.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.nome, p.razao_social FROM pessoa p " +
-                    "JOIN fornecedor f ON p.id = f.fk_pessoa_id");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String nome = rs.getString("nome");
-                String razao_social = rs.getString("razao_social");
-                if (nome != null && !nome.isEmpty()) {
-                    nomeFornecedorComboBox.getItems().add(nome);
-                }
-                if (razao_social != null && !razao_social.isEmpty()) {
-                    nomeFornecedorComboBox.getItems().add(razao_social);
-                }
-            }
-            nomeFornecedorComboBox.getItems().add("Nenhum Fornecedor");
-            nomeFornecedorComboBox.getSelectionModel().selectLast();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void handleSearch() {
         String searchId = searchIdField.getText().trim();
+        String nomeProduto = nomeProdutoTextField.getText().trim();
+        String nomeFornecedor = nomeFornecedorTextField.getText().trim();
 
         if (!searchId.isEmpty()) {
             try {
@@ -117,14 +75,14 @@ public class FornecimentoPesquisarController {
 
         List<Object> parameters = new ArrayList<>();
 
-        if (!nomeProdutoComboBox.getValue().equals("Nenhum Produto")) {
+        if (!nomeProduto.isEmpty()) {
             sql.append(" AND LOWER(p.nome) LIKE ?");
-            parameters.add("%" + nomeProdutoComboBox.getValue().toLowerCase() + "%");
+            parameters.add("%" + nomeProduto.toLowerCase() + "%");
         }
-        if (!nomeFornecedorComboBox.getValue().equals("Nenhum Fornecedor")) {
+        if (!nomeFornecedor.isEmpty()) {
             sql.append(" AND (LOWER(ps.nome) LIKE ? OR LOWER(ps.razao_social) LIKE ?)");
-            parameters.add("%" + nomeFornecedorComboBox.getValue().toLowerCase() + "%");
-            parameters.add("%" + nomeFornecedorComboBox.getValue().toLowerCase() + "%");
+            parameters.add("%" + nomeFornecedor.toLowerCase() + "%");
+            parameters.add("%" + nomeFornecedor.toLowerCase() + "%");
         }
         if (!searchId.isEmpty()) {
             sql.append(" AND f.id = ?");
