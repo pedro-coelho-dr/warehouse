@@ -34,6 +34,10 @@ public class PedidoCriarController {
 
     @FXML
     private void initialize() {
+        typeToggleGroup = new ToggleGroup();
+        vendaRadioButton.setToggleGroup(typeToggleGroup);
+        aluguelRadioButton.setToggleGroup(typeToggleGroup);
+        vendaRadioButton.setSelected(true);
         populateClienteComboBox();
         populateFuncionarioComboBox();
         addProductField(); // Start with one product field
@@ -75,20 +79,26 @@ public class PedidoCriarController {
         try (Connection conn = DatabaseConnector.getConnection()) {
             conn.setAutoCommit(false);
 
-            String cliente = clienteComboBox.getValue();
-            String funcionario = funcionarioComboBox.getValue();
+            long clienteId = Long.parseLong(clienteComboBox.getValue().trim().split(" - ")[0].split("id:")[1]);
+            long funcionarioId = Long.parseLong(funcionarioComboBox.getValue().trim().split(" - ")[0].split("id:")[1]);
             String tipoPedido = vendaRadioButton.isSelected() ? "Venda" : "Aluguel";
 
-            long pedidoId = insertPedido(cliente, funcionario, tipoPedido);
+            long pedidoId = insertPedido(conn, clienteId, funcionarioId, tipoPedido);
 
             for (HBox productField : productFields) {
                 ComboBox<String> produtoComboBox = (ComboBox<String>) productField.getChildren().get(0);
                 TextField quantidadeField = (TextField) productField.getChildren().get(1);
 
-                String produto = produtoComboBox.getValue();
+                long produtoId = Long.parseLong(produtoComboBox.getValue().trim().split(" - ")[0].split("id:")[1]);
                 int quantidade = Integer.parseInt(quantidadeField.getText().trim());
 
-                insertCarrinho(conn, pedidoId, produto, quantidade);
+                insertCarrinho(conn, pedidoId, produtoId, quantidade);
+            }
+
+            if (tipoPedido.equals("Venda")) {
+                insertVenda(conn, pedidoId);
+            } else if (tipoPedido.equals("Aluguel")) {
+                insertAluguel(conn, pedidoId);
             }
 
             conn.commit();
@@ -150,14 +160,14 @@ public class PedidoCriarController {
         }
     }
 
-    private long insertPedido(String cliente, String funcionario, String tipoPedido) throws SQLException {
-        String sql = "INSERT INTO pedido (valor_total, desconto, data_expedicao, fk_cliente_id, fk_funcionario_id) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnector.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    private long insertPedido(Connection conn, long clienteId, long funcionarioId, String tipoPedido) throws SQLException {
+        String sql = "INSERT INTO pedido (valor_total, desconto, fk_cliente_id, fk_funcionario_id) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, cliente);
-            stmt.setString(2, funcionario);
-            stmt.setString(3, tipoPedido);
+            stmt.setDouble(1, 0.0);
+            stmt.setDouble(2, 0.0);
+            stmt.setLong(3, clienteId);
+            stmt.setLong(4, funcionarioId);
             stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -170,17 +180,31 @@ public class PedidoCriarController {
         }
     }
 
-    private void insertCarrinho(Connection conn, long pedidoId, String produto, int quantidade) throws SQLException {
-        String sql = "INSERT INTO carrinho (pedido_id, produto, quantidade) VALUES (?, ?, ?)";
+    private void insertCarrinho(Connection conn, long pedidoId, long produtoId, int quantidade) throws SQLException {
+        String sql = "INSERT INTO carrinho (fk_pedido_id, fk_produto_id, quantidade) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, pedidoId);
-            stmt.setString(2, produto);
+            stmt.setLong(2, produtoId);
             stmt.setInt(3, quantidade);
             stmt.executeUpdate();
         }
     }
 
+    private void insertVenda(Connection conn, long pedidoId) throws SQLException {
+        String sql = "INSERT INTO venda (fk_pedido_id) VALUES (?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, pedidoId);
+            stmt.executeUpdate();
+        }
+    }
 
+    private void insertAluguel(Connection conn, long pedidoId) throws SQLException {
+        String sql = "INSERT INTO aluguel (fk_pedido_id, data_devolucao, status) VALUES (?, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'Entregue')";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, pedidoId);
+            stmt.executeUpdate();
+        }
+    }
 
     private boolean validateFields() {
         if (clienteComboBox.getSelectionModel().isEmpty()) {

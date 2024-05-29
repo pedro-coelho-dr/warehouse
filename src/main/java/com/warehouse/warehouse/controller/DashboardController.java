@@ -154,7 +154,7 @@ public class DashboardController {
                     "ORDER BY total_pedidos DESC LIMIT 1";
             rs = stmt.executeQuery(queryClienteMes);
             if (rs.next()) {
-                clienteMesLabel.setText(rs.getString("nome") + " - " + rs.getInt("total_pedidos") + " pedidos");
+                clienteMesLabel.setText(rs.getString("nome") + " - " + rs.getInt("total_pedidos") + " pedido(s)");
             } else {
                 clienteMesLabel.setText("N/A");
             }

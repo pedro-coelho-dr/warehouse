@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoCriarController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoCriarController">
     <Label fx:id="titleLabel" style="-fx-font-size: 24px;" text="Cadastrar um fornecimento" />
    <Separator maxWidth="Infinity" opacity="0.0" prefHeight="50.0" prefWidth="700.0" />
    <Separator maxWidth="Infinity" />

@@ -83,7 +83,6 @@ public class DepartamentoPesquisarController {
         if (selectedDepartamentoInfo != null) {
             long departamentoId = Long.parseLong(selectedDepartamentoInfo.split(" - ")[0].split(": ")[1]);
 
-            // Create a custom confirmation dialog
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Confirmação");
             dialog.setContentText("Tem certeza de que deseja excluir o departamento selecionado?");
@@ -99,7 +98,7 @@ public class DepartamentoPesquisarController {
 
                         stmt.setLong(1, departamentoId);
                         stmt.executeUpdate();
-                        handleSearch(); // Refresh the list
+                        handleSearch();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                         Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Erro ao excluir o departamento.");
