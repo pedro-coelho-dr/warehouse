@@ -103,10 +103,19 @@ public class PedidoCriarController {
 
             conn.commit();
             statusLabel.setText("Pedido criado com sucesso.");
+            limparCampos();
         } catch (SQLException ex) {
             ex.printStackTrace();
             statusLabel.setText("Erro ao conectar com o banco de dados.");
         }
+    }
+
+    private void limparCampos() {
+        clienteComboBox.getSelectionModel().clearSelection();
+        funcionarioComboBox.getSelectionModel().clearSelection();
+        typeToggleGroup.selectToggle(vendaRadioButton);
+        produtosContainer.getChildren().clear();
+        addProductField();
     }
 
     private void populateClienteComboBox() {

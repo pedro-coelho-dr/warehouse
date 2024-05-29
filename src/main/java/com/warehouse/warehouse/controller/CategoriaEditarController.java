@@ -1,6 +1,7 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -27,10 +28,14 @@ public class CategoriaEditarController {
 
     @FXML
     private void initialize() {
-        // Initialization code, if needed.
+        addFieldValidators();
     }
 
-
+    private void addFieldValidators() {
+        // Max length
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextAreaLimit(descricaoField, 500);
+    }
 
     private void loadCategoryData() {
         String sql = "SELECT * FROM categoria WHERE id = ?";
@@ -41,8 +46,8 @@ public class CategoriaEditarController {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                nomeField.setText(rs.getString("nome"));
-                descricaoField.setText(rs.getString("descricao"));
+                nomeField.setText(rs.getString("nome") != null ? rs.getString("nome") : "");
+                descricaoField.setText(rs.getString("descricao") != null ? rs.getString("descricao") : "");
             }
 
         } catch (SQLException e) {
@@ -82,6 +87,4 @@ public class CategoriaEditarController {
             statusLabel.setText("Erro ao conectar com o banco de dados.");
         }
     }
-
-
 }

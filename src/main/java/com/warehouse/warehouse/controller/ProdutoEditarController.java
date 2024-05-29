@@ -1,6 +1,7 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -38,6 +39,7 @@ public class ProdutoEditarController {
     @FXML
     private void initialize() {
         carregarCategorias();
+        addFieldValidators();
     }
 
     private void carregarCategorias() {
@@ -61,6 +63,20 @@ public class ProdutoEditarController {
         }
     }
 
+    private void addFieldValidators() {
+        // Max length
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextAreaLimit(descricaoField, 500);
+        FieldValidation.setTextFieldLimit(precoVendaField, 10);
+        FieldValidation.setTextFieldLimit(precoAluguelField, 10);
+        FieldValidation.setTextFieldLimit(quantidadeEstoqueField, 10);
+
+        // Numeric and Decimal fields
+        FieldValidation.setDecimalField(precoVendaField, 10, 2);
+        FieldValidation.setDecimalField(precoAluguelField, 10, 2);
+        FieldValidation.setNumericField(quantidadeEstoqueField);
+    }
+
     private void loadProductData() {
         String sql = "SELECT * FROM produto WHERE id = ?";
         try (Connection conn = DatabaseConnector.getConnection();
@@ -70,11 +86,11 @@ public class ProdutoEditarController {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                nomeField.setText(rs.getString("nome"));
-                descricaoField.setText(rs.getString("descricao"));
-                precoVendaField.setText(rs.getBigDecimal("preco_venda").toString());
-                precoAluguelField.setText(rs.getBigDecimal("preco_aluguel").toString());
-                quantidadeEstoqueField.setText(String.valueOf(rs.getInt("quantidade_estoque")));
+                nomeField.setText(rs.getString("nome") != null ? rs.getString("nome") : "");
+                descricaoField.setText(rs.getString("descricao") != null ? rs.getString("descricao") : "");
+                precoVendaField.setText(rs.getBigDecimal("preco_venda") != null ? rs.getBigDecimal("preco_venda").toString() : "0.00");
+                precoAluguelField.setText(rs.getBigDecimal("preco_aluguel") != null ? rs.getBigDecimal("preco_aluguel").toString() : "0.00");
+                quantidadeEstoqueField.setText(rs.getString("quantidade_estoque") != null ? rs.getString("quantidade_estoque") : "0");
                 categoriaComboBox.setValue(getCategoriaNameById(rs.getInt("fk_categoria_id")));
             }
 

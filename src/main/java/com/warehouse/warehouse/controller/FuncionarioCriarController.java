@@ -241,6 +241,7 @@ public class FuncionarioCriarController {
 
             conn.commit();
             statusLabel.setText("Funcionário criado com sucesso.");
+            limparCampos();
         } catch (SQLException ex) {
             try {
                 if (conn != null) conn.rollback();
@@ -255,6 +256,30 @@ public class FuncionarioCriarController {
             if (conn != null) try { conn.close(); } catch (SQLException ex) { /* Ignored */ }
         }
     }
+
+    private void limparCampos() {
+        emailField.clear();
+        nomeField.clear();
+        cpfField.clear();
+        razaoSocialField.clear();
+        cnpjField.clear();
+        for (Node node : phoneContainer.getChildren()) {
+            if (node instanceof TextField) {
+                ((TextField) node).clear();
+            }
+        }
+        ruaField.clear();
+        numeroField.clear();
+        bairroField.clear();
+        cidadeField.clear();
+        estadoComboBox.getSelectionModel().clearSelection();
+        cepField.clear();
+        dataContratacaoPicker.setValue(null);
+        salarioField.clear();
+        statusToggleGroup.selectToggle(ativoRadioButton);
+        departamentoComboBox.getSelectionModel().clearSelection();
+        gerenteComboBox.getSelectionModel().clearSelection();
+        typeToggleGroup.selectToggle(pfRadioButton);}
 
     private void populateDepartamentoComboBox() {
         departamentoComboBox.getItems().clear();

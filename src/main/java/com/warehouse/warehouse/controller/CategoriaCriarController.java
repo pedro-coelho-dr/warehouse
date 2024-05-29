@@ -1,9 +1,13 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class CategoriaCriarController {
 
@@ -13,6 +17,17 @@ public class CategoriaCriarController {
     private TextArea descricaoField;
     @FXML
     private Label statusLabel;
+
+    @FXML
+    private void initialize() {
+        addFieldValidators();
+    }
+
+    private void addFieldValidators() {
+        // Max length
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextAreaLimit(descricaoField, 500);
+    }
 
     @FXML
     private void saveCategory() {

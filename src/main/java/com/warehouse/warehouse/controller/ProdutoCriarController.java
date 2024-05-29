@@ -1,6 +1,7 @@
 package com.warehouse.warehouse.controller;
 
 import com.warehouse.warehouse.database.DatabaseConnector;
+import com.warehouse.warehouse.util.FieldValidation;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -32,6 +33,7 @@ public class ProdutoCriarController {
     @FXML
     private void initialize() {
         carregarCategorias();
+        addFieldValidators();
     }
 
     private void carregarCategorias() {
@@ -53,6 +55,20 @@ public class ProdutoCriarController {
             e.printStackTrace();
             statusLabel.setText("Erro ao carregar categorias.");
         }
+    }
+
+    private void addFieldValidators() {
+        // Max length
+        FieldValidation.setTextFieldLimit(nomeField, 100);
+        FieldValidation.setTextAreaLimit(descricaoField, 500);
+        FieldValidation.setTextFieldLimit(precoVendaField, 10);
+        FieldValidation.setTextFieldLimit(precoAluguelField, 10);
+        FieldValidation.setTextFieldLimit(quantidadeEstoqueField, 10);
+
+        // Numeric and Decimal fields
+        FieldValidation.setDecimalField(precoVendaField, 10, 2);
+        FieldValidation.setDecimalField(precoAluguelField, 10, 2);
+        FieldValidation.setNumericField(quantidadeEstoqueField);
     }
 
     @FXML

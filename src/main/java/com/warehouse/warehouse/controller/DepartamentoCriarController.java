@@ -53,6 +53,7 @@ public class DepartamentoCriarController {
 
             conn.commit();
             statusLabel.setText("Departamento criado com sucesso.");
+            limparCampos();
 
         } catch (SQLException ex) {
             try {
@@ -66,5 +67,10 @@ public class DepartamentoCriarController {
             if (stmt != null) try { stmt.close(); } catch (SQLException ex) { /* Ignored */ }
             if (conn != null) try { conn.close(); } catch (SQLException ex) { /* Ignored */ }
         }
+    }
+
+    private void limparCampos() {
+        nomeField.clear();
+        descricaoField.clear();
     }
 }

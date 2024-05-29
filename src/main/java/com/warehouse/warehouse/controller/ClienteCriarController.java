@@ -211,6 +211,7 @@ public class ClienteCriarController {
 
             conn.commit();
             statusLabel.setText("Cliente criado com sucesso.");
+            limparCampos();
 
         } catch (SQLException ex) {
             try {
@@ -225,6 +226,25 @@ public class ClienteCriarController {
             if (stmt != null) try { stmt.close(); } catch (SQLException ex) { /* Ignored */ }
             if (conn != null) try { conn.close(); } catch (SQLException ex) { /* Ignored */ }
         }
+    }
+    private void limparCampos() {
+        emailField.clear();
+        nomeField.clear();
+        cpfField.clear();
+        razaoSocialField.clear();
+        cnpjField.clear();
+        for (Node node : phoneContainer.getChildren()) {
+            if (node instanceof TextField) {
+                ((TextField) node).clear();
+            }
+        }
+        ruaField.clear();
+        numeroField.clear();
+        bairroField.clear();
+        cidadeField.clear();
+        estadoComboBox.getSelectionModel().clearSelection();
+        cepField.clear();
+        typeToggleGroup.selectToggle(pfRadioButton);
     }
 
     private boolean validateFields() {
