@@ -1,30 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoPesquisarController">
-    <Label fx:id="titleLabel" style="-fx-font-size: 24px;" text="Pesquisar Fornecimento" />
-    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" maxWidth="700" minWidth="700" vbarPolicy="AS_NEEDED">
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.warehouse.warehouse.controller.FornecimentoPesquisarController"
+      spacing="20" style="-fx-padding: 20;" alignment="TOP_LEFT">
+    <Label fx:id="titleLabel" text="Pesquisar Fornecimento" style="-fx-font-size: 24px;" />
+    <ScrollPane fitToWidth="true" fitToHeight="true" minWidth="700" maxWidth="700" vbarPolicy="AS_NEEDED" hbarPolicy="AS_NEEDED">
         <VBox alignment="TOP_LEFT" maxWidth="700">
-            <HBox alignment="CENTER_LEFT" maxWidth="780" spacing="20">
-                <VBox maxWidth="280" minWidth="280" spacing="10" style="-fx-padding: 10;">
-
-                    <TextField fx:id="nomeProdutoTextField" maxWidth="280" promptText="Nome do produto" />
-
-                    <TextField fx:id="nomeFornecedorTextField" maxWidth="280" promptText="Nome do fornecedor" />
-
-                    <TextField fx:id="searchIdField" maxWidth="280" promptText="ID do fornecimento " />
-                    <Button maxWidth="80" onAction="#handleSearch" text="Pesquisar" />
-                    <Label fx:id="statusLabel" text=" " style="-fx-text-fill: red;" />
+            <HBox spacing="20" maxWidth="780" alignment="CENTER_LEFT">
+                <VBox spacing="10" style="-fx-padding: 10;" minWidth="280" maxWidth="280">
+                    <TextField fx:id="nomeProdutoTextField" promptText="Nome do produto" maxWidth="280"/>
+                    <TextField fx:id="nomeFornecedorTextField" promptText="Nome do fornecedor" maxWidth="280"/>
+                    <TextField fx:id="searchIdField" promptText="ID do fornecimento" maxWidth="280"/>
+                    <Button text="Pesquisar" onAction="#handleSearch" maxWidth="80"/>
+                    <Label fx:id="statusLabel" style="-fx-text-fill: red;" text=" " />
                 </VBox>
-                <VBox maxWidth="390" minWidth="390" spacing="10" style="-fx-padding: 10;">
-                    <ListView fx:id="fornecedorList" prefHeight="400" prefWidth="390" />
+                <VBox spacing="10" style="-fx-padding: 10;" minWidth="390" maxWidth="390">
+                    <ListView fx:id="fornecedorList" prefHeight="400" prefWidth="390"/>
                 </VBox>
             </HBox>
         </VBox>
