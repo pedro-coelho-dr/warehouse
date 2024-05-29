@@ -54,7 +54,7 @@ Alternativamente, dentro do shell do mysql:
 source /opt/db/initdb.sql
 ```
 ```bash
-source /opt/db/populatedb.sql
+source /opt/db/populatedb2.sql
 ```
 
 ### Rodar a aplicação
@@ -78,8 +78,11 @@ A estrutura básica do projeto é a seguinte:
 ### Modelo Lógico
 ![armazem_logico](https://github.com/pedro-coelho-dr/warehouse/assets/111138996/638d13d8-abf1-47b9-9a5f-f1382dfe83dc)
 
-### Diaagrama de Fluxo
+### Diagrama de Fluxo
 ![warehouse_flux](https://github.com/pedro-coelho-dr/warehouse/assets/111138996/b9791bdc-606c-4a5f-bd7c-2f3ceae17399)
+
+### Screencast
+[![Screencast](https://img.youtube.com/vi/ZzyJMsNny6M/0.jpg)](https://youtu.be/ZzyJMsNny6M)
 
 ## Equipe
 <table>
